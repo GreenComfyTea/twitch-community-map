@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.fluid.classless.min.css">
+		<link rel="stylesheet" href="style.css">
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/antv-g6/4.8.24/g6.min.js"></script> -->
+
+		
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.0/cytoscape.umd.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/2.4.0/sigma.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/graphology/0.25.4/graphology.umd.js"></script> -->
+		<!-- <script src="https://github.com/graphology/graphology/releases/download/0.25.4/graphology-library.js"></script> -->
+		<script src="https://unpkg.com/force-graph"></script>
+		<script src="https://unpkg.com/d3-quadtree"></script>
+		<script src="https://unpkg.com/d3-force"></script>
+		<script type="module" src="js/map-Force-Graph.js" defer></script>
+		<script type="module" src="script.js" defer></script>
+		<!-- <script type="module" src="parser.js" defer></script> -->
+		<title>Twitch Community Map</title>
+	</head>
+	<body>
+		<div class="map-container" id="map"></div>
+		<div class="menu-container">
+			<div class="option-container">
+				<select class="streamer-dropdown" onchange="onStreamerChange(this)">
+					<option value="HAchubby">HAchubby</option> 
+					<option value="fakehachubby">fakehachubby</option> 
+				</select>
+	
+				<select class="year-dropdown" onchange="onYearChange(this)">
+					<option value="2022">2022</option>
+					<option value="2023">2023</option>
+				</select>
+	
+				<select class="timeframe-dropdown" onchange="onTimeframeChange(this)">
+					<option value="year">Year</option>
+					<option value="01">January</option>
+					<option value="02">February</option>
+					<option value="03">March</option>
+					<option value="04">April</option>
+					<option value="05">May</option>
+					<option value="06">June</option>
+					<option value="07">July</option>
+					<option value="08">August</option>
+					<option value="09">September</option>
+					<option value="10">October</option>
+					<option value="11">November</option>
+					<option value="12">December</option>
+				</select>
+	
+				<select class="ping-type-dropdown" onchange="onPingTypeChange(this)">
+					<option value="pingsReceived">Pings Received</option>
+					<option value="pingsSent">Pings Sent</option>
+				</select>
+			</div>
+
+			<div class="title-container">
+				<span class="title text-shadow">Twitch Community Map</span>
+			</div>
+
+			<div class="description-container">
+				<span class="description text-shadow">Node Size = How many pings the person received</span>
+			</div>
+
+			<div class="legend-container">
+				<div class="legend">
+					<span class="legend-circle streamer-circle"></span>
+					<span class="type text-shadow streamer-type">Streamer</span>
+				</div>
+				<div class="legend">
+					<span class="legend-circle moderator-circle"></span>
+					<span class="type text-shadow moderator-type">Moderators</span>
+				</div>
+				<div class="legend">
+					<span class="legend-circle vip-circle"></span>
+					<span class="type text-shadow vip-type">VIPs</span>
+				</div>
+				<div class="legend">
+					<span class="legend-circle partner-circle"></span>
+					<span class="type text-shadow partner-type">Partners</span>
+				</div>
+				<div class="legend">
+					<span class="legend-circle subscriber-circle"></span>
+					<span class="type text-shadow subscriber-type">Subscribers</span>
+				</div>
+				<div class="legend">
+					<span class="legend-circle viewer-circle"></span>
+					<span class="type text-shadow viewer-type">Viewer</span>
+				</div>
+			</div>
+			
+		</div>
+	</body>
+</html>
