@@ -46,34 +46,84 @@ select {
 	width: fit-content;
 }
 
-.menu-container {
+input {
+	min-width: 3rem;
+	pointer-events: all;
+}
+
+.hidden {
+	visibility: hidden;
+}
+
+.map-container {
+	width: 100%;
+	height: 100%;
+}
+
+.graph-tooltip {
+	font: var(--font-family);
+	font-size: 500px;
+}
+
+.ui-container {
 	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	pointer-events: none;
+}
+
+.left-ui-container {
 	display: flex;
 	flex-direction: column;
-	justify-content: left;
+	pointer-events: none;
+}
+
+.map-option-container {
+	display: flex;
+	flex-direction: row;
 	gap: var(--default-margin);
 	padding: var(--default-margin);
 	pointer-events: none;
 }
 
-.option-container {
+.filter-search-container {
 	display: flex;
 	flex-direction: row;
-	justify-content: left;
 	gap: var(--default-margin);
+	padding: var(--default-margin);
+	align-items: center;
+	pointer-events: none;
+}
+
+.dropdown {
+	margin-bottom: 0;
+	height: fit-content;
 	pointer-events: all;
+}
+
+.button {
+	width: fit-content;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	margin-bottom: 0;
+	pointer-events: all;
+	height: fit-content;
 }
 
 .title {
 	--margin: calc(2 * var(--default-margin));
 
-	font-size: 1.5rem;
+	font-size: 2rem;
 	color: var(--streamer-color);
 	margin-left: var(--margin);
 }
 
-
 .description {
+	font-size: 0.85rem;
 	--margin: calc(2 * var(--default-margin));
 
 	color: var(--streamer-color);
@@ -170,10 +220,43 @@ select {
 	margin-left: var(--default-margin);
 }
 
-.map-container {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	width: 100%;
-	height: 100%;
+.right-ui-container {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	pointer-events: none;
+}
+
+.search-container {
+	display: flex;
+	flex-direction: row;
+	gap: var(--default-margin);
+	justify-content: left;
+}
+
+.filter-label {
+	display: inline-block;
+	min-width: fit-content;
+}
+
+.min-pings-label {
+	text-align: right;
+	min-width: 2.5rem;
+}
+
+#search-field {
+	margin-bottom: 0;
+}
+
+#min-pings-slider {
+	margin-bottom: 0;
+}
+
+.checkbox {
+	min-width: 1.25rem;
+	min-height: 1.25rem;
+	width: 1.25rem;
+	height: 1.25rem;
+	margin-top: 0;
+	border-radius: 0.25rem;
 }
