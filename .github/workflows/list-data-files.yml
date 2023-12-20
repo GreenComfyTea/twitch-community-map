@@ -19,6 +19,11 @@ jobs:
     needs: list-data-files
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+          persist-credentials: true # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+          fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
       - name: Output Results
         run: |
           echo ${{ needs.list-data-files.outputs.paths }}
@@ -31,12 +36,6 @@ jobs:
           contents: |
             ${{ github.repository }}
             ${{ needs.list-data-files.outputs.paths }}
-            
-      - name: Checkout
-        uses: actions/checkout@master
-        with:
-          persist-credentials: true # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
-          fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
 
       - name: Push Commit
         uses: actions-js/push@master
