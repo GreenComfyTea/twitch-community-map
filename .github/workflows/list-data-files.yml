@@ -4,7 +4,7 @@ jobs:
   list-files:
     runs-on: ubuntu-latest
     outputs:
-      paths: ${{ steps.list-files.outputs.paths }}
+      paths: ${{ steps.list-data-files.outputs.paths }}
     steps:
       - name: List Data Files
         id: list-data-files
@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Output results
         run: |
-          echo ${{ needs.list-data-files.outputs.paths }}
+          echo ${{ needs.list-files.outputs.paths }}
 
       - name: Overwrite File
         uses: "DamianReeves/write-file-action@master"
@@ -29,7 +29,7 @@ jobs:
           path: data_file_list.json
           write-mode: overwrite
           contents: |
-            ${{ needs.list-data-files.outputs.paths }}
+            ${{ needs.list-files.outputs.paths }}
             
       - name: Push Commit
         uses: Andro999b/push@v1.3
