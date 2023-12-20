@@ -1,6 +1,6 @@
 import Stats from "https://cdnjs.cloudflare.com/ajax/libs/stats.js/r17/Stats.js";
 
-const DEBUG = false;
+// const DEBUG = false;
 
 const colors = {
 	Streamer: "#ff5c81",
@@ -43,17 +43,22 @@ var rightLimit = limit * window.innerWidth;
 var topLimit = window.innerHeight - bottomLimit;
 var leftLimit = window.innerWidth - rightLimit;
 
-if(DEBUG) {
-	var totalFPS = new Stats();
-	totalFPS.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-	document.body.appendChild(totalFPS.dom);
+var lastGlobalScale = 1;
 
-	var totalFT = new Stats();
-	totalFT.showPanel(1); // 0: fps, 1: ms, 2: mb, 3+: custom
-	document.body.appendChild(totalFT.dom);
-	totalFT.dom.style.left = "90px";
-	console.log(totalFT.dom);
-}
+const gridSize = 7500;
+const minGridValue = -(gridSize / 2);
+
+// if(DEBUG) {
+// 	var totalFPS = new Stats();
+// 	totalFPS.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+// 	document.body.appendChild(totalFPS.dom);
+
+// 	var totalFT = new Stats();
+// 	totalFT.showPanel(1); // 0: fps, 1: ms, 2: mb, 3+: custom
+// 	document.body.appendChild(totalFT.dom);
+// 	totalFT.dom.style.left = "90px";
+// 	console.log(totalFT.dom);
+// }
 
 function loadMap(streamer, year, timeframe, pingType, minPings, newPerformanceMode) {
 	performanceMode = newPerformanceMode;
@@ -61,6 +66,8 @@ function loadMap(streamer, year, timeframe, pingType, minPings, newPerformanceMo
 	let fileName = `${streamer}_${year}`;
 	if (timeframe !== "year") fileName = `${fileName}_${timeframe}`;
 	fileName = `${fileName}_${pingType}`;
+
+	// console.log(`./data/${streamer}/${year}/${timeframe}/${fileName}.json`);
 
 	fetch(`./data/${streamer}/${year}/${timeframe}/${fileName}.json`)
     .then((response) => response.json())
@@ -91,6 +98,9 @@ function preprocessData(data, pingType) {
 			node.x = Math.floor(nodeAttributes.x || 0);
 			node.y = Math.floor(nodeAttributes.y || 0);
 
+			// node.x = minGridValue + gridSize * Math.random();
+			// node.y = minGridValue + gridSize * Math.random();
+
 			delete node.attributes;
 		}
 		node.pingCount = node[pingType];
@@ -116,7 +126,7 @@ function preprocessData(data, pingType) {
 		node.fontSize = Math.max(4, fontSizeProportion * node.radius * nodeRelSize);
 		node.fontOutlineWidth = Math.max(2, fontOutlineProportion * node.radius * nodeRelSize);
 
-		node.collisionDistance = 5 + 45 * Math.random() + node.outlineWidth + 2 * node.diameter;
+		node.collisionDistance = 5 + 95 * Math.random() + node.outlineWidth + 2 * node.diameter;
 		
 		node.visibilityLimit = 3 * (node.radius + node.outlineWidth);
 	});
@@ -220,28 +230,27 @@ function createGraph(data) {
 	map(mapElement)
 		.width(window.innerWidth)
 		.height(window.innerHeight)
-		.nodeId("name")
 		.nodeRelSize(nodeRelSize)
+		.nodeId("name")
 		.nodeVal("squaredRadius")
 		.nodeLabel("tooltipText")
 		.nodeColor("color")
+
+		.nodeVisibility((node) => {
+			const screenCoordinates = map.graph2ScreenCoords(node.x, node.y);
+			const visibilityLimit =  lastGlobalScale * node.visibilityLimit;
+
+			if(screenCoordinates.y > visibilityLimit + window.innerHeight) return false;
+			if (screenCoordinates.x > visibilityLimit + window.innerWidth) return false;
+			if (screenCoordinates.x < -visibilityLimit) return false;
+			if (screenCoordinates.y < -visibilityLimit) return false;
+
+			return true;
+		})
+
 		.nodeCanvasObjectMode(() => "after")
 		.nodeCanvasObject((node, context, globalScale) => {
-			// context.globalCompositeOperation = "source-over";
-
-			const screenCoordinates = map.graph2ScreenCoords(node.x, node.y);
-			const visibilityLimit =  globalScale * node.visibilityLimit;
-
-			if(screenCoordinates.y > visibilityLimit + window.innerHeight) return;
-			if (screenCoordinates.x > visibilityLimit + window.innerWidth) return;
-			if (screenCoordinates.x < -visibilityLimit) return;
-			if (screenCoordinates.y < -visibilityLimit) return;
-
-			// // Circle
-			// context.beginPath();
-			// context.arc(node.x, node.y, node.radius, 0, 2 * Math.PI, false);
-			// context.fillStyle = node.color;
-			// context.fill();
+			//context.globalCompositeOperation = "source-over";
 	
 			// Outline
 			context.lineJoin = "round";
@@ -265,6 +274,54 @@ function createGraph(data) {
 		    context.fillText(node.displayName, node.x, node.y);
 		})
 
+		.linkWidth("width")
+		.linkColor((link) => performanceMode ? outlineColors[link.userType] : colors[link.userType] + "80")
+
+		.linkCurvature((link) => performanceMode ? 0 : 0.25)
+
+		//#region 
+		// .linkVisibility((link) => {
+		// 	return true;
+		// 	//if(!performanceMode) return true;
+
+		// 	const sourceNode = link.source;
+		// 	const targetNode = link.target;
+
+		// 	const sourceScreenCoordinates = map.graph2ScreenCoords(sourceNode.x, sourceNode.y);
+		// 	const targetScreenCoordinates = map.graph2ScreenCoords(targetNode.x, targetNode.y);
+
+
+		// 	const sourceVisibilityLimit =  lastGlobalScale * sourceNode.visibilityLimit;
+		// 	const targetVisibilityLimit =  lastGlobalScale * targetNode.visibilityLimit;
+
+		// 	if(sourceScreenCoordinates.x > sourceVisibilityLimit + window.innerWidth
+		// 	&& targetScreenCoordinates.x > targetVisibilityLimit + window.innerWidth)
+		// 	{
+		// 		return false;
+		// 	}
+
+		// 	if(sourceScreenCoordinates.y > sourceVisibilityLimit + window.innerHeight
+		// 	&& targetScreenCoordinates.y > targetVisibilityLimit + window.innerHeight)
+		// 	{
+		// 		return false;
+		// 	}
+	
+		// 	if(sourceScreenCoordinates.x < -sourceVisibilityLimit
+		// 	&& targetScreenCoordinates.x < -targetVisibilityLimit)
+		// 	{
+		// 		return false;
+		// 	}
+
+		// 	if(sourceScreenCoordinates.y < -sourceVisibilityLimit
+		// 	&& targetScreenCoordinates.y < -targetVisibilityLimit)
+		// 	{
+		// 		return false;
+		// 	}
+
+		// 	return true;
+		// })
+		//#endregion
+
 		.linkCanvasObjectMode(() => "after")
 		.linkCanvasObject((link, context, globalScale) => {
 			if(performanceMode) return;
@@ -276,15 +333,16 @@ function createGraph(data) {
 				context.save();
 			}
 		})
-	
-		.linkVisibility(true)
-		.linkColor((link) => performanceMode ? outlineColors[link.userType] : colors[link.userType] + "80")
-		.linkWidth("width")
-		.linkCurvature((link) => performanceMode ? 0 : 0.25)
-	
-		.cooldownTicks(0)
-		.d3Force("collide", d3.forceCollide((node) => node.collisionDistance)) 
+
+		//.cooldownTicks(0)
+		.d3Force("charge", d3.forceManyBody().strength(-30).theta(1.2))
+		.d3Force("center", d3.forceCenter().strength(0.025))
+		.d3Force("collide", d3.forceCollide((node) => node.collisionDistance).strength(0.5).iterations(1)) 
+		.d3Force("link", d3.forceLink(map.graphData().links).id((link) => link.name).distance((link) => 1000 / link.pingCount).strength(0.5))
+		
 		.onRenderFramePre((context, globalScale) => {
+			lastGlobalScale = globalScale;
+
 			// t0 = performance.now();
 			map.autoPauseRedraw(true);
 
@@ -313,10 +371,10 @@ function createGraph(data) {
 		// 	}
 		// })
 		.onZoom((transform) => map.linkWidth((link) => link.width * transform.k))
-		.onNodeDragEnd((node) => {
-		    node.fx = node.x;
-		    node.fy = node.y;
-		})
+		// .onNodeDragEnd((node) => {
+		//     node.fx = node.x;
+		//     node.fy = node.y;
+		// })
 
 		.graphData(data)
 		//.zoomToFit(500, -1500, () => true);
@@ -353,5 +411,7 @@ function onPerformanceModeChange(newPerformanceMode) {
 	performanceMode = newPerformanceMode;
 	map.autoPauseRedraw(false);
 }
+
+console.log(d3);
 
 export {loadMap, onCanvasResize, onSearchRequested, onFilterRequested, onPerformanceModeChange};
