@@ -1,23 +1,30 @@
 name: List Data Files
 on: [push]
 jobs:
-  list:
-    name: List Data Files
+  list-files:
+    runs-on: ubuntu-latest
+    outputs:
+      paths: ${{ steps.list-files.outputs.paths }}
+    steps:
+      - name: List Files
+        id: list-files
+        uses: mirko-felice/list-files-action@v3.0.5
+        with:
+          repo: ${{ github.repository }}
+          ref: ${{ github.ref }}
+          path: "."
+          ext: ".yml"
+          
+  Test:
+    needs: list-files
+    strategy:
+      matrix:
+        paths: ${{ fromJson(needs.list-files.outputs.paths) }}
     runs-on: ubuntu-latest
     steps:
-      - name: Set Up Python 3.7
-        uses: actions/setup-python@v1
-        with:
-          python-version: "3.7"
-
-      - uses: actions/checkout@v1
-
-      - name: Fetch Action
-        id: path_list
-        uses: Rishabh510/Path-lister-action@master
-        with:
-          path: "data/"
-          type: ".json"
+      - name: Output results
+        run: |
+          echo ${{ matrix.paths }}
 
       - name: Overwrite File
         uses: "DamianReeves/write-file-action@master"
@@ -25,7 +32,7 @@ jobs:
           path: data_file_list.txt
           write-mode: overwrite
           contents: |
-            ${{ steps.path_list.outputs.paths }} | tr " " "\n"
+            ${{ needs.list-files.outputs.paths }}
             
       - name: Push Commit
         uses: Andro999b/push@v1.3
