@@ -26,7 +26,7 @@ jobs:
       - name: Overwrite File
         uses: "DamianReeves/write-file-action@master"
         with:
-          path: data_file_list.txt
+          path: data_file_list.json
           write-mode: overwrite
           contents: |
             ${{ needs.list-data-files.outputs.paths }}
