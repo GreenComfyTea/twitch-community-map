@@ -1,45 +1,39 @@
-name: List File
+name: List Data Files
 on: [push]
 jobs:
   list:
-    name: Path lister
+    name: Path Lister
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Python 3.7
+      - name: Set Up Python 3.7
         uses: actions/setup-python@v1
         with:
           python-version: "3.7"
 
       - uses: actions/checkout@v1
 
-      - name: Fetch action
-        id: pl
+      - name: Fetch Action
+        id: path_list
         uses: Rishabh510/Path-lister-action@master
         with:
           path: "data/"
           type: ".json"
 
-      - name: Output results
-        run: |
-          echo "Found ${{ steps.pl.outputs.path_count }} file(s) with this extension:"
-          for i in ${{ steps.pl.outputs.paths }}; do
-          echo $i
-          done
-
-      - name: Overwrite file
+      - name: Overwrite File
         uses: "DamianReeves/write-file-action@master"
         with:
           path: data_file_list.js
           write-mode: overwrite
           contents: |
-            for i in ${{ steps.pl.outputs.paths }}; do
-              echo $i
-            done
+            ${{ steps.path_list.outputs.paths }}
             
-      - name: Commit & Push
+      - name: Push Commit
         uses: Andro999b/push@v1.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
           force: true
-          message: 'Overwritten by Github Actions - ${date}'
+          message: 'Data File List Updated - ${date}'
+          commit_user_name: github-actions 🤖
+          commit_user_email: actions@github.com
+          commit_author: GitHub Actions 🤖 <actions@github.com>
