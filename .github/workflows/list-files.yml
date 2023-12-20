@@ -32,7 +32,9 @@ jobs:
           path: data_file_list.js
           write-mode: overwrite
           contents: |
-            console.log(steps.pl.outputs.paths);
+            for i in ${{ steps.pl.outputs.paths }}; do
+              echo $i
+            done
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
