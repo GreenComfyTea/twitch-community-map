@@ -22,10 +22,11 @@ jobs:
       - name: Overwrite File
         uses: "DamianReeves/write-file-action@master"
         with:
-          path: data_file_list.js
+          path: data_file_list.txt
           write-mode: overwrite
           contents: |
             ${{ steps.path_list.outputs.paths }}
+            echo "test"
             
       - name: Push Commit
         uses: Andro999b/push@v1.3
