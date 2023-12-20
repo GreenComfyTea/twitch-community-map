@@ -1,4 +1,26 @@
-import { loadMap, onCanvasResize, onFilterRequested, onSearchRequested, onPerformanceModeChange } from "./js/map-Force-Graph.js";
+import { onDataLoaded, loadData, data } from "./data-loader.js";
+import { loadMap, onCanvasResize, onFilterRequested, onSearchRequested, onPerformanceModeChange } from "./map-Force-Graph.js";
+
+const timeframeNames = {
+	"year": "Year",
+	"01": "January",
+	"02": "February",
+	"03": "March",
+	"04": "April",
+	"05": "May",
+	"06": "June",
+	"07": "July",
+	"08": "August",
+	"09": "September",
+	"10": "October",
+	"11": "November",
+	"12": "December"
+}
+
+const pingTypeNames = {
+	"pingsReceived": "Pings Received",
+	"pingsSent": "Pings Sent"
+}
 
 var streamer = "HAchubby";
 var year = "2022";
@@ -70,22 +92,22 @@ function loadUserDataFromLocalStorage() {
 
 	if(storedStreamer) {
 		streamer = storedStreamer;
-		streamerDropdown.value = storedStreamer;
+		//streamerDropdown.value = storedStreamer;
 	}
 
 	if(storedYear) {
 		year = storedYear;
-		yearDropdown.value = storedYear;
+		//yearDropdown.value = storedYear;
 	}
 
 	if(storedTimeframe) {
 		timeframe = storedTimeframe;
-		timeframeDropdown.value = storedTimeframe;
+		//timeframeDropdown.value = storedTimeframe;
 	}
 
 	if(storedPingType) {
 		pingType = storedPingType;
-		pingTypeDropdown.value = storedPingType;
+		//pingTypeDropdown.value = storedPingType;
 	}
 
 	if(storedMinPings) {
@@ -108,16 +130,25 @@ function loadUserDataFromLocalStorage() {
 window.onStreamerChange = function(selected) {
 	streamer = selected.value;
 	saveUserDataToLocalStorage();
+
+	populateYearDropdowns();
+	populateTimeframeDropdowns();
+	populatePingTypeDropdowns();
 }
 
 window.onYearChange = function(selected) {
 	year = selected.value;
 	saveUserDataToLocalStorage();
+
+	populateTimeframeDropdowns();
+	populatePingTypeDropdowns();
 }
 
 window.onTimeframeChange = function(selected) {
 	timeframe = selected.value;
 	saveUserDataToLocalStorage();
+
+	populatePingTypeDropdowns();
 }
 
 window.onPingTypeChange = function(selected) {
@@ -167,13 +198,70 @@ window.onPerformanceModeChange = function(checkbox) {
 	onPerformanceModeChange(performanceMode);
 }
 
-function getStreamers() {
+function populateStreamerDropdown() {
+	const streamers = Object.keys(data)
+		.sort((left, right) => left.toLocaleLowerCase().localeCompare(right.toLocaleLowerCase()));
+
+	streamers.forEach((streamer) => createSelectOption(streamerDropdown, streamer, streamer));
+
+	if(!streamers.includes(streamer)) {
+		streamer = streamers[0];
+	}
+
+	streamerDropdown.value = streamer;
 }
 
-function getYears() {
+function populateYearDropdowns() {
+	const years = Object.keys(data[streamer])
+		.map((year) => parseInt(year))
+		.sort((left, right) => left - right);
+
+	years.forEach((year) => createSelectOption(yearDropdown, year, year));
+
+	if(!years.includes(parseInt(year))) {
+		year = years[0];
+	}
+
+	yearDropdown.value = year;
 }
 
-function getTimeframes() {
+function populateTimeframeDropdowns() {
+	const timeframes = Object.keys(data[streamer][year])
+		.map((timeframe) => { 
+			return { value: timeframe, text: timeframeNames[timeframe] };
+		})
+		.sort((left, right) => left.value.localeCompare(right.value));
+
+	timeframes.forEach((timeframe) => createSelectOption(timeframeDropdown, timeframe.text, timeframe.value));
+
+	if (!timeframes.some((dropdownTimeframe) => dropdownTimeframe.value.localeCompare(timeframe))) {
+		timeframe = timeframes[0].value;
+	}
+
+	timeframeDropdown.value = timeframe;
+}
+
+function populatePingTypeDropdowns() {
+	const pingTypes = Object.keys(data[streamer][year][timeframe])
+		.map((pingType) => {
+			return { value: pingType, text: pingTypeNames[pingType] };
+		})
+		.sort((left, right) => left.text.toLocaleLowerCase().localeCompare(right.text.toLocaleLowerCase()));
+
+	pingTypes.forEach((pingType) => createSelectOption(pingTypeDropdown, pingType.text, pingType.value));
+
+	if (!pingTypes.some((dropdownPingType) => dropdownPingType.value.localeCompare(pingType))) {
+		pingType = pingTypes[0].value;
+	}
+
+	pingTypeDropdown.value = pingType;
+}
+
+function createSelectOption(select, text, value) {
+	const option = document.createElement('option');
+    option.value = value;
+    option.innerHTML = text;
+    select.appendChild(option);
 }
 
 window.onload = (event) => {
@@ -192,11 +280,30 @@ window.onload = (event) => {
 
 	performanceModeCheckbox.checked = performanceMode;
 
-	uiContainer.classList.remove("hidden");
+	if(data !== undefined) {
+		populateStreamerDropdown();
+		populateYearDropdowns();
+		populateTimeframeDropdowns();
+		populatePingTypeDropdowns();
 
-	loadMap(streamer, year, timeframe, pingType, minPings, performanceMode);
+		uiContainer.classList.remove("hidden");
+	}
+	else {
+		onDataLoaded(() => {
+			populateStreamerDropdown();
+			populateYearDropdowns();
+			populateTimeframeDropdowns();
+			populatePingTypeDropdowns();
+
+			uiContainer.classList.remove("hidden");
+		});
+	}
+
+	//loadMap(streamer, year, timeframe, pingType, minPings, performanceMode);
 };
 
 onresize = (event) => {
 	onCanvasResize();
 };
+
+loadData();

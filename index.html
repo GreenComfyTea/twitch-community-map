@@ -16,7 +16,8 @@
 		<script src="https://unpkg.com/d3-force"></script>
 
 		<script type="module" src="js/map-Force-Graph.js" defer></script>
-		<script type="module" src="script.js" defer></script>
+		<script type="module" src="js/data-loader.js" defer></script>
+		<script type="module" src="js/script.js" defer></script>
 
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.fluid.classless.min.css">
 		<link rel="stylesheet" href="style.css">
@@ -29,36 +30,10 @@
 		<div class="ui-container hidden" id="ui-container">
 			<div class="left-ui-container">
 				<div class="map-option-container">
-					<select class="dropdown" id="streamer-dropdown" onchange="onStreamerChange(this)">
-						<option value="HAchubby">HAchubby</option> 
-						<option value="fakehachubby">fakehachubby</option> 
-					</select>
-		
-					<select class="dropdown" id="year-dropdown" onchange="onYearChange(this)">
-						<option value="2022">2022</option>
-						<option value="2023">2023</option>
-					</select>
-		
-					<select class="dropdown" id="timeframe-dropdown" onchange="onTimeframeChange(this)">
-						<option value="year">Year</option>
-						<option value="01">January</option>
-						<option value="02">February</option>
-						<option value="03">March</option>
-						<option value="04">April</option>
-						<option value="05">May</option>
-						<option value="06">June</option>
-						<option value="07">July</option>
-						<option value="08">August</option>
-						<option value="09">September</option>
-						<option value="10">October</option>
-						<option value="11">November</option>
-						<option value="12">December</option>
-					</select>
-		
-					<select class="dropdown" id="ping-type-dropdown" onchange="onPingTypeChange(this)">
-						<option value="pingsReceived">Pings Received</option>
-						<option value="pingsSent">Pings Sent</option>
-					</select>
+					<select class="dropdown" id="streamer-dropdown" onchange="onStreamerChange(this)"></select>
+					<select class="dropdown" id="year-dropdown" onchange="onYearChange(this)"></select>
+					<select class="dropdown" id="timeframe-dropdown" onchange="onTimeframeChange(this)"></select>
+					<select class="dropdown" id="ping-type-dropdown" onchange="onPingTypeChange(this)"></select>
 	
 					<button class="button" onclick="onApply()">Load</button>
 				</div>
