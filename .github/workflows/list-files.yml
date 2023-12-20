@@ -25,3 +25,19 @@ jobs:
           for i in ${{ steps.pl.outputs.paths }}; do
           echo $i
           done
+
+      - name: Overwrite file
+        uses: "DamianReeves/write-file-action@master"
+        with:
+          path: data_file_list.js
+          write-mode: overwrite
+          contents: |
+            ${{ steps.pl.outputs.paths }}
+            
+      - name: Commit & Push
+        uses: Andro999b/push@v1.3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+          force: true
+          message: 'Overwritten by Github Actions - ${date}'
