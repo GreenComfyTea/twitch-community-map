@@ -203,7 +203,7 @@ function populateStreamerDropdown() {
 		.sort((left, right) => left.toLocaleLowerCase().localeCompare(right.toLocaleLowerCase()));
 
 
-	streamerDropdown.replaceChildren();
+	streamerDropdown.textContent = "";
 	streamers.forEach((streamer) => createSelectOption(streamerDropdown, streamer, streamer));
 
 	if(!streamers.includes(streamer)) {
@@ -217,7 +217,7 @@ function populateYearDropdowns() {
 		.map((year) => parseInt(year))
 		.sort((left, right) => left - right);
 
-	yearDropdown.replaceChildren();
+	yearDropdown.textContent = "";
 	years.forEach((year) => createSelectOption(yearDropdown, year, year));
 
 	if(!years.includes(parseInt(year))) {
@@ -234,7 +234,7 @@ function populateTimeframeDropdowns() {
 		})
 		.sort((left, right) => left.value.localeCompare(right.value));
 
-	timeframeDropdown.replaceChildren();
+	timeframeDropdown.textContent = "";
 	timeframes.forEach((timeframe) => createSelectOption(timeframeDropdown, timeframe.text, timeframe.value));
 
 	if (!timeframes.some((dropdownTimeframe) => dropdownTimeframe.value.localeCompare(timeframe))) {
@@ -251,7 +251,7 @@ function populatePingTypeDropdowns() {
 		})
 		.sort((left, right) => left.text.toLocaleLowerCase().localeCompare(right.text.toLocaleLowerCase()));
 
-	pingTypeDropdown.replaceChildren();
+	pingTypeDropdown.textContent = "";
 	pingTypes.forEach((pingType) => createSelectOption(pingTypeDropdown, pingType.text, pingType.value));
 
 	if (!pingTypes.some((dropdownPingType) => dropdownPingType.value.localeCompare(pingType))) {
