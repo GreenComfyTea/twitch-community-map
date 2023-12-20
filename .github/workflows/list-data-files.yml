@@ -12,8 +12,8 @@ jobs:
         with:
           repo: ${{ github.repository }}
           ref: ${{ github.ref }}
-          path: "."
-          ext: ".yml"
+          path: "data"
+          ext: ".json"
           
   Test:
     needs: list-files
