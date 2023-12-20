@@ -24,20 +24,23 @@ jobs:
           echo ${{ needs.list-data-files.outputs.paths }}
 
       - name: Overwrite Output File
-        uses: "DamianReeves/write-file-action@master"
+        uses: DamianReeves/write-file-action@master
         with:
           path: data_file_list.json
           write-mode: overwrite
           contents: |
             ${{ github.repository }}
             ${{ needs.list-data-files.outputs.paths }}
-            
+
+      - uses: actions/checkout@master
+        with:
+          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+          fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
       - name: Push Commit
-        uses: Andro999b/push@v1.3
+        uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
-          force: true
           message: 'Data File List Updated'
           author_email: actions@github.com
           author_name: GitHub Actions 🤖 <actions@github.com>
