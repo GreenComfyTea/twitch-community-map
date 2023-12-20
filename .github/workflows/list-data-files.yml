@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Output results
         run: |
-          echo ${{ needs.list-files.outputs.paths }}
+          echo ${{ needs.list-data-files.outputs.paths }}
 
       - name: Overwrite File
         uses: "DamianReeves/write-file-action@master"
@@ -29,7 +29,7 @@ jobs:
           path: data_file_list.txt
           write-mode: overwrite
           contents: |
-            ${{ needs.list-files.outputs.paths }}
+            ${{ needs.list-data-files.outputs.paths }}
             
       - name: Push Commit
         uses: Andro999b/push@v1.3
