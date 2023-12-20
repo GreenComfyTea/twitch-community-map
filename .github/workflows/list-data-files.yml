@@ -2,7 +2,7 @@ name: List Data Files
 on: [push]
 jobs:
   list:
-    name: Path Lister
+    name: List Data Files
     runs-on: ubuntu-latest
     steps:
       - name: Set Up Python 3.7
@@ -34,6 +34,5 @@ jobs:
           branch: main
           force: true
           message: 'Data File List Updated - ${date}'
-          commit_user_name: github-actions 🤖
-          commit_user_email: actions@github.com
-          commit_author: GitHub Actions 🤖 <actions@github.com>
+          author_email: actions@github.com
+          author_name: GitHub Actions 🤖 <actions@github.com>
