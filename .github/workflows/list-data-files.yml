@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Output results
         run: |
-          echo ${{ fromJson(needs.list-files.outputs.paths) }}
+          echo ${{ needs.list-files.outputs.paths }}
 
       - name: Overwrite File
         uses: "DamianReeves/write-file-action@master"
