@@ -25,10 +25,7 @@ jobs:
           path: data_file_list.txt
           write-mode: overwrite
           contents: |
-            ```
-            ${{ steps.path_list.outputs.paths }}
-            ${echo "test"}
-            ```
+            ${{ steps.path_list.outputs.paths }} | tr " " "\n"
             
       - name: Push Commit
         uses: Andro999b/push@v1.3
