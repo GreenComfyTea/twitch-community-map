@@ -24,8 +24,6 @@ function processData(json) {
 		const fileName = filePathNameSplit[4];
 		const type = fileName.split(/[_.]/)[3];
 
-		//console.log(`${streamer} - ${year} - ${timeframe}`);
-
 		if(!Object.hasOwn(dataTemp, streamer)) {
 			dataTemp[streamer] = {};
 		}
@@ -47,8 +45,6 @@ function processData(json) {
 		timeframeData[type] = filePathName;
 	});
 
-	//data.sort((left, right) => left.name.localeCompare(right.name));
-	console.log(dataTemp);
 	data = dataTemp;
 	onDataLoadedCallback();
 }
