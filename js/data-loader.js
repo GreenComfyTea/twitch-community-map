@@ -22,7 +22,7 @@ function processData(json) {
 		const year = filePathNameSplit[2];
 		const timeframe = filePathNameSplit[3];
 		const fileName = filePathNameSplit[4];
-		const type = fileName.split(/[_.]/)[3];
+		const type = timeframe === "year" ? fileName.split(/[_.]/)[2] : fileName.split(/[_.]/)[3];
 
 		if(!Object.hasOwn(dataTemp, streamer)) {
 			dataTemp[streamer] = {};
