@@ -381,9 +381,7 @@ window.onload = (event) => {
 
 		onSearchRequested(clickedUsername);
 	});
-
-	console.log(leaderboardTable);
-
+	
 	loadUserDataFromLocalStorage();
 
 	performanceModeCheckbox.checked = performanceMode;

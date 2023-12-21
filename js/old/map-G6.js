@@ -104,13 +104,10 @@ function handleResize(e) {
 graph.on('edge:dragstart', (event) => {  
 
 	event.target = graph.get('canvas');  
-	console.log(event.target);
 	graph.emit('canvas:dragstart', event);
 });
 
 graph.data(data);
 graph.render();
-
-console.log(graph);
 
 window.onresize = handleResize;

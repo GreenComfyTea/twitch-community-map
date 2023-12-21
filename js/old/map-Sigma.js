@@ -3,10 +3,7 @@ fetch("./hachubby_graph.gexf")
 .then((gexf) => {
 	let graph = graphologyLibrary.gexf.parse(graphology.Graph, gexf);
 
-	console.log(graph);
-
 	graph._nodes.forEach((node) => {
-		console.log(node);
 		node.attributes.size /= 10; 
 		//graph.setNodeAttribute(nodeIndex, "size", graph.getNodeAttribute(nodeIndex, "size") / 10);
 	});
