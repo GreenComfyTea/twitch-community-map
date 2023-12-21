@@ -25,7 +25,7 @@ var onMapLoadedCallback = (data) => {};
 
 const outlineProportion = 0.15;
 const fontSizeProportion = 0.275;
-const fontOutlineProportion = 0.2;
+const fontOutlineProportion = 0.175;
 const sqrtPI = Math.sqrt(Math.PI);
 
 const nodeRelSize = 4;
@@ -50,6 +50,8 @@ var lastGlobalScale = 1;
 
 const gridSize = 7500;
 const minGridValue = -(gridSize / 2);
+
+var cooldownTicks = Infinity;
 
 // if(DEBUG) {
 // 	var totalFPS = new Stats();
@@ -86,6 +88,10 @@ function loadMap(streamer, year, timeframe, pingType, minPings, newPerformanceMo
 function preprocessData(data, pingType) {
 	const isGephiGenerated = Object.hasOwn(data, "attributes");
 
+	if(isGephiGenerated) {
+		cooldownTicks = 0;
+	}
+
 	data.nodes.forEach((node) => {
 
 		if(isGephiGenerated) {
@@ -98,14 +104,17 @@ function preprocessData(data, pingType) {
 			node.userType = nodeAttributes.usertype || "Viewer";
 			node.pingsReceived = nodeAttributes.pingsreceived || 0;
 			node.pingsSent = nodeAttributes.pingssent || 0;
+
 			node.x = Math.floor(nodeAttributes.x || 0);
 			node.y = Math.floor(nodeAttributes.y || 0);
 
-			// node.x = minGridValue + gridSize * Math.random();
-			// node.y = minGridValue + gridSize * Math.random();
-
 			delete node.attributes;
 		}
+		else {
+			node.x = minGridValue + gridSize * Math.random();
+			node.y = minGridValue + gridSize * Math.random();
+		}
+
 		node.pingCount = node[pingType];
 
 		node.displayName = node.displayName || node.name;
@@ -125,7 +134,7 @@ function preprocessData(data, pingType) {
 		node.outlineWidth = Math.max(2, outlineProportion * node.radius * nodeRelSize);
 	
 		node.fontSize = Math.max(4, fontSizeProportion * node.radius * nodeRelSize);
-		node.fontOutlineWidth = Math.max(2, fontOutlineProportion * node.radius * nodeRelSize);
+		node.fontOutlineWidth = Math.max(1, fontOutlineProportion * node.radius * nodeRelSize);
 
 		node.collisionDistance = 5 + 95 * Math.random() + node.outlineWidth + 2 * node.diameter;
 		
@@ -344,7 +353,7 @@ function createGraph(data) {
 			}
 		})
 
-		//.cooldownTicks(0)
+		.cooldownTicks(cooldownTicks)
 		.d3Force("charge", d3.forceManyBody().strength(-30).theta(1.2))
 		.d3Force("center", d3.forceCenter().strength(0.025))
 		.d3Force("collide", d3.forceCollide((node) => node.collisionDistance).strength(0.5).iterations(1)) 
@@ -387,7 +396,7 @@ function createGraph(data) {
 		// })
 
 		.graphData(data)
-		//.zoomToFit(500, -1500, () => true);
+		.zoomToFit(500, -1500, () => true);
 }
 
 function onFilterRequested(minPings) {
@@ -397,12 +406,10 @@ function onFilterRequested(minPings) {
 }
 
 function onSearchRequested(userName) {
-	if(userName === "" || userName === null || userName === undefined) return;
 
-	const userNameTemp = userName.trim().toLowerCase();
 	const padding = 0.25 * Math.min(window.innerWidth, window.innerHeight);
 
-	map.zoomToFit(1000, padding, (node) => node.name === userNameTemp);
+	map.zoomToFit(1000, padding, (node) => node.name === userName);
 }
 
 function onCanvasResize() {
