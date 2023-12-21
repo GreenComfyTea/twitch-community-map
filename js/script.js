@@ -166,19 +166,16 @@ window.onMinPingsInput = function(newValue) {
 
 window.onFilterKeyUp = function(event) {
 	if (event.key !== "Enter") return;
-
-	onFilterRequested(minPings);
+	filter();
 }
 
 window.onFilter = function() {
-	leaderboardTable.clear().draw();
-	onFilterRequested(minPings);
+	filter();
 }
 
 window.onSearchKeyUp = function(event) {
 	if (event.key !== "Enter") return;
-
-	onSearchRequested(searchUsername);
+	search();
 }
 
 window.onSearchInput = function(newValue) {
@@ -186,8 +183,8 @@ window.onSearchInput = function(newValue) {
 	saveUserDataToLocalStorage();
 }
 
-window.onSearch = function() {
-	onSearchRequested(searchUsername);
+window.onSearchClick = function() {
+	search();
 }
 
 window.onApply = function(event) {
@@ -199,6 +196,25 @@ window.onPerformanceModeChange = function(checkbox) {
 	saveUserDataToLocalStorage();
 
 	onPerformanceModeChange(performanceMode);
+}
+
+function search() {
+	if(searchUsername === "" || searchUsername === null || searchUsername === undefined) return;
+
+	const searchUsernameTemp = searchUsername.trim().toLowerCase();
+
+	onSearchRequested(searchUsernameTemp);
+
+	const tableRow = document.getElementById(searchUsernameTemp);
+
+	if (!tableRow) return;
+
+	tableRow.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+}
+
+function filter() {
+	leaderboardTable.clear().draw();
+	onFilterRequested(minPings);
 }
 
 function populateStreamerDropdown() {
@@ -303,6 +319,7 @@ window.onload = (event) => {
 		//scroller: true,
 		//responsive: true,
 		order: [[0, 'asc']],
+		width: 0,
 		fixedHeader: {
 			header: true,
 			footer: false
@@ -314,50 +331,55 @@ window.onload = (event) => {
 			{ data: "pingsSent" }
 		],
 		createdRow: (row, node, index) => {
+
+			row.id = node.name;
 		
 			switch(node.userType) {
 				case "Streamer":
 					row.classList.add("streamer-type");
-					row.classList.add("table-text-shadow");
 					break;
 				case "Moderator":
 					row.classList.add("moderator-type");
-					row.classList.add("table-text-shadow");
 					break;
 				case "VIP":
 					row.classList.add("vip-type");
-					row.classList.add("table-text-shadow");
 					break;
 				case "Partner":
 					row.classList.add("partner-type");
-					row.classList.add("table-text-shadow");
 					break;
 				case "Subscriber":
 					row.classList.add("subscriber-type");
-					row.classList.add("table-light-text-shadow");
 					break;
 				default:
 					row.classList.add("viewer-type");
-					row.classList.add("table-light-text-shadow");
 					
 			}
 
 			switch(node.place) {
 				case 1: 
 					row.classList.add("first-place");
-					row.classList.add("table-text-shadow");
 					break;
 				case 2:
 					row.classList.add("second-place");
-					row.classList.add("table-text-shadow");
 					break;
 				case 3:
 					row.classList.add("third-place");
-					row.classList.add("table-text-shadow");
 					break;
 			}
 
+			row.classList.add("table-text-shadow");
 		}
+	});
+
+	leaderboardTable.on('click', 'tbody tr', function() {
+		const node = leaderboardTable.row(this).data();
+		if(!node) return;
+
+		const clickedUsername = node.name;
+
+		if(!clickedUsername) return;
+
+		onSearchRequested(clickedUsername);
 	});
 
 	console.log(leaderboardTable);
@@ -389,15 +411,9 @@ window.onload = (event) => {
 };
 
 onMapLoaded((data) => {
-	console.log(data);
-	// data.nodes.forEach((node) => {
-	// 	console.log(node);
-	// 	leaderboardTable.row.add(node).draw(false);
-	// });
-
 	leaderboardTable.rows.add(data.nodes);
+	leaderboardTable.columns.adjust();
 	leaderboardTable.draw();
-	//leaderboardTable.data(data.nodes);
 });
 
 onresize = (event) => {

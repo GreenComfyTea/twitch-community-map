@@ -95,7 +95,7 @@
 					<button class="button" onclick="onFilter()">Filter</button>
 	
 					<input class="search-field" id="search-field" type="text" placeholder="Username" oninput="onSearchInput(this.value)" onkeyup="onSearchKeyUp(event)">
-						<button class="button" onclick="onSearch(event)">Search</button>
+						<button class="button" onclick="onSearchClick(event)">Search</button>
 					</input>
 				</div>
 
@@ -105,13 +105,13 @@
 				</div>
 
 				<div class="leaderboard-container">
-					<table id="leaderboard-table" class="leaderboard">
+					<table id="leaderboard-table" class="leaderboard nowrap">
 						<thead>
 							<tr>
 								<th>🏆</th>
 								<th>🙎‍♀️ <span class="text-shadow">Username</span></th>
-								<th>🡇 <span class="text-shadow">Received</span></th>
-								<th>🡅 <span class="text-shadow">Sent</span></th>
+								<th><span class="green-text">🡇</span> <span class="text-shadow">Received</span></th>
+								<th><span class="blue-text">🡅</span> <span class="text-shadow">Sent</span></th>
 							</tr>
 						</thead>
 						<tbody>
