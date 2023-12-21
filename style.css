@@ -12,8 +12,9 @@
 	--moderator-color: #00bf03;
 	--vip-color: #ff00d0;
 	--partner-color: #00caff;
-	--subscriber-color: #9147ff;
-	--viewer-color: #146654;
+	--subscriber-color: #a947ff;
+	
+	--viewer-color: #1c8c74;
 
 	--background-color: rgb(15, 15, 15);
 
@@ -43,6 +44,37 @@ select {
 input {
 	min-width: 3rem;
 	pointer-events: all;
+}
+
+table {
+	margin-bottom: 0.25rem;
+}
+
+th {
+	font-size: 1rem;
+	min-width: fit-content;
+	white-space: nowrap;
+}
+
+tr {
+	font-size: 1rem;
+	text-shadow:
+		-0.1rem	-0.1rem	0 rgb(15, 15, 15),
+		 0		-0.1rem	0 rgb(15, 15, 15),
+		 0.1rem	-0.1rem	0 rgb(15, 15, 15),
+		 0.1rem	 0		0 rgb(15, 15, 15),
+		 0.1rem	 0.1rem	0 rgb(15, 15, 15),
+		 0		 0.1rem	0 rgb(15, 15, 15),
+		-0.1rem	 0.1rem	0 rgb(15, 15, 15),
+		-0.1rem	 0		0 rgb(15, 15, 15); 
+}
+
+tr th {
+	border-bottom-color: var(--pico-outline);
+}
+
+tr td {
+	color: inherit;
 }
 
 .hidden {
@@ -288,6 +320,31 @@ input {
 	margin-right: 0;
 	margin-bottom: 0;
 	border-radius: 0.25rem;
+}
+
+.leaderboard-container {
+	margin: var(--default-margin);
+	padding: var(--default-margin);
+	margin-top: 3rem;
+	background-color: rgba(15, 15, 15, 0.5);
+	border-style: solid;
+	border-width: 0.1rem;
+	border-color: var(--pico-outline);
+	border-radius: 0.5rem;
+	pointer-events: all;
+	overflow: hidden;
+}
+
+.first-place {
+	background-color: rgba(255, 215, 0, 0.75);
+}
+
+.second-place {
+	background-color: rgba(192, 192, 192, 0.75);
+}
+
+.third-place {
+	background-color: rgba(205, 127, 50, 0.75);
 }
 
 #min-pings-slider {

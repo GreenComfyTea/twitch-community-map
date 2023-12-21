@@ -7,8 +7,9 @@ const colors = {
 	Moderator: "#00bf03",
 	VIP: "#ff00d0",
 	Partner: "#00caff",
-	Subscriber: "#9147ff",
-	Viewer: "#146654",
+	Subscriber: "#a947ff",
+	//Subscriber: "#4d88ff",
+	Viewer: "#1c8c74",
 };
 
 const outlineColors = {
@@ -19,6 +20,8 @@ const outlineColors = {
 	Subscriber: "#48237f",
 	Viewer: "#0a332a",
 };
+
+var onMapLoadedCallback = (data) => {};
 
 const outlineProportion = 0.15;
 const fontSizeProportion = 0.275;
@@ -104,8 +107,6 @@ function preprocessData(data, pingType) {
 			delete node.attributes;
 		}
 		node.pingCount = node[pingType];
-		delete node.pingsReceived;
-		delete node.pingsSent;
 
 		node.displayName = node.displayName || node.name;
 		node.tooltipText = `${node.displayName} (${node.userType}) - ${node.pingCount}`;
@@ -162,10 +163,10 @@ function preprocessData(data, pingType) {
 	delete data.attributes;
 }
 
-function filterData(data, minPings) {
+function filterData(dataCopy, minPings) {
 	const newNodes = [];
 
-	data.nodes.forEach((node) => {
+	dataCopy.nodes.forEach((node) => {
 		if(node.pingCount >= minPings) {
 			newNodes.push(node);
 			return;
@@ -177,7 +178,7 @@ function filterData(data, minPings) {
 		// }
 
  		// Remove links attached to node
-		data.links = data.links.filter(link => link.sourceNode !== node && link.targetNode !== node);
+		dataCopy.links = dataCopy.links.filter(link => link.sourceNode !== node && link.targetNode !== node);
 
 		// const newLinks = [];
 		// let isAnyLinkedNodeQualified = false;
@@ -218,7 +219,16 @@ function filterData(data, minPings) {
 		// }
 	});
 
-	data.nodes = newNodes;
+	dataCopy.nodes = newNodes;
+	assignPlaces(dataCopy);
+	onMapLoadedCallback(dataCopy);
+}
+
+function assignPlaces(dataCopy) {
+	dataCopy.nodes.sort((left, right) => right.pingCount - left.pingCount);
+
+	let i = 1;
+	dataCopy.nodes.forEach((node) => node.place = i++);
 }
 
 function createGraph(data) {
@@ -407,11 +417,13 @@ function onCanvasResize() {
 	map.height(window.innerHeight);
 }
 
+function onMapLoaded(callback) {
+	onMapLoadedCallback = callback;
+}
+
 function onPerformanceModeChange(newPerformanceMode) {
 	performanceMode = newPerformanceMode;
 	map.autoPauseRedraw(false);
 }
 
-console.log(d3);
-
-export {loadMap, onCanvasResize, onSearchRequested, onFilterRequested, onPerformanceModeChange};
+export {loadMap, data as mapData, onCanvasResize, onSearchRequested, onFilterRequested, onPerformanceModeChange, onMapLoaded};

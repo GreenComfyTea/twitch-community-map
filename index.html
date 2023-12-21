@@ -11,16 +11,21 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/2.4.0/sigma.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/graphology/0.25.4/graphology.umd.js"></script> -->
 		<!-- <script src="https://github.com/graphology/graphology/releases/download/0.25.4/graphology-library.js"></script> -->
+		<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+		<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+		<script src="https://cdn.datatables.net/fixedheader/3.4.0/js/dataTables.fixedHeader.min.js"></script>
 		<script src="https://unpkg.com/force-graph"></script>
 		<script src="https://unpkg.com/d3-quadtree"></script>
 		<script src="https://unpkg.com/d3-force"></script>
+
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.fluid.classless.min.css">
+		<link rel="stylesheet" href="style.css">
 
 		<script type="module" src="js/map-Force-Graph.js" defer></script>
 		<script type="module" src="js/data-loader.js" defer></script>
 		<script type="module" src="js/script.js" defer></script>
 
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.fluid.classless.min.css">
-		<link rel="stylesheet" href="style.css">
+
 		<!-- <script type="module" src="parser.js" defer></script> -->
 		<title>Twitch Community Map</title>
 	</head>
@@ -62,6 +67,10 @@
 							<span class="type text-shadow vip-type">VIPs</span>
 						</div>
 						<div class="legend">
+							<span class="legend-circle artist-circle"></span>
+							<span class="type text-shadow artist-type">Artists</span>
+						</div>
+						<div class="legend">
 							<span class="legend-circle partner-circle"></span>
 							<span class="type text-shadow partner-type">Partners</span>
 						</div>
@@ -71,7 +80,7 @@
 						</div>
 						<div class="legend">
 							<span class="legend-circle viewer-circle"></span>
-							<span class="type text-shadow viewer-type">Viewer</span>
+							<span class="type text-shadow viewer-type">Viewers</span>
 						</div>
 					</div>
 				</div>
@@ -93,6 +102,21 @@
 				<div class="performance-mode-container">
 					<span class="filter-label text-shadow">Performance Mode</span>
 					<input type="checkbox" class="checkbox" id="performance-mode-checkbox" name="performance-mode-checkbox" onchange="onPerformanceModeChange(this)" />
+				</div>
+
+				<div class="leaderboard-container">
+					<table id="leaderboard-table" class="leaderboard">
+						<thead>
+							<tr>
+								<th>🏆</th>
+								<th>🙎‍♀️ <span class="text-shadow">Username</span></th>
+								<th>🡇 <span class="text-shadow">Received</span></th>
+								<th>🡅 <span class="text-shadow">Sent</span></th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>	

@@ -1,5 +1,5 @@
 import { onDataLoaded, loadData, data } from "./data-loader.js";
-import { loadMap, onCanvasResize, onFilterRequested, onSearchRequested, onPerformanceModeChange } from "./map-Force-Graph.js";
+import { loadMap, mapData, onCanvasResize, onFilterRequested, onSearchRequested, onPerformanceModeChange, onMapLoaded } from "./map-Force-Graph.js";
 
 const timeframeNames = {
 	"year": "Year",
@@ -42,6 +42,8 @@ var minPingsLabel;
 var minPingsSlider;
 var searchField;
 var performanceModeCheckbox;
+
+var leaderboardTable;
 
 function saveUserDataToLocalStorage() {
 	if (!localStorage) {
@@ -169,6 +171,7 @@ window.onFilterKeyUp = function(event) {
 }
 
 window.onFilter = function() {
+	leaderboardTable.clear().draw();
 	onFilterRequested(minPings);
 }
 
@@ -188,7 +191,7 @@ window.onSearch = function() {
 }
 
 window.onApply = function(event) {
-	loadMap(streamer, year, timeframe, pingType, minPings, performanceMode);
+	loadNewMap();
 }
 
 window.onPerformanceModeChange = function(checkbox) {
@@ -261,6 +264,11 @@ function populatePingTypeDropdowns() {
 	pingTypeDropdown.value = pingType;
 }
 
+function loadNewMap() {
+	leaderboardTable.clear().draw();
+	loadMap(streamer, year, timeframe, pingType, minPings, performanceMode);
+}
+
 function createSelectOption(select, text, value) {
 	const option = document.createElement('option');
     option.value = value;
@@ -279,6 +287,80 @@ window.onload = (event) => {
 	minPingsSlider = document.getElementById("min-pings-slider");
 	searchField = document.getElementById("search-field");
 	performanceModeCheckbox = document.getElementById("performance-mode-checkbox");
+
+	leaderboardTable = new DataTable('#leaderboard-table', {
+		// options
+		deferRender: true,
+		lengthChange: true,
+		autoWidth: true,
+		paging: false,
+		processing: true,
+		serverSide: false,
+		searching: false,
+		ordering: true,
+		scrollY: "16rem",
+		info: false,
+		//scroller: true,
+		//responsive: true,
+		order: [[0, 'asc']],
+		fixedHeader: {
+			header: true,
+			footer: false
+		},
+		columns: [
+			{ data: "place" },
+			{ data: "displayName" },
+			{ data: "pingsReceived" },
+			{ data: "pingsSent" }
+		],
+		createdRow: (row, node, index) => {
+		
+			switch(node.userType) {
+				case "Streamer":
+					row.classList.add("streamer-type");
+					row.classList.add("table-text-shadow");
+					break;
+				case "Moderator":
+					row.classList.add("moderator-type");
+					row.classList.add("table-text-shadow");
+					break;
+				case "VIP":
+					row.classList.add("vip-type");
+					row.classList.add("table-text-shadow");
+					break;
+				case "Partner":
+					row.classList.add("partner-type");
+					row.classList.add("table-text-shadow");
+					break;
+				case "Subscriber":
+					row.classList.add("subscriber-type");
+					row.classList.add("table-light-text-shadow");
+					break;
+				default:
+					row.classList.add("viewer-type");
+					row.classList.add("table-light-text-shadow");
+					
+			}
+
+			switch(node.place) {
+				case 1: 
+					row.classList.add("first-place");
+					row.classList.add("table-text-shadow");
+					break;
+				case 2:
+					row.classList.add("second-place");
+					row.classList.add("table-text-shadow");
+					break;
+				case 3:
+					row.classList.add("third-place");
+					row.classList.add("table-text-shadow");
+					break;
+			}
+
+		}
+	});
+
+	console.log(leaderboardTable);
 
 	loadUserDataFromLocalStorage();
 
@@ -303,8 +385,20 @@ window.onload = (event) => {
 		});
 	}
 
-	loadMap(streamer, year, timeframe, pingType, minPings, performanceMode);
+	loadNewMap();
 };
+
+onMapLoaded((data) => {
+	console.log(data);
+	// data.nodes.forEach((node) => {
+	// 	console.log(node);
+	// 	leaderboardTable.row.add(node).draw(false);
+	// });
+
+	leaderboardTable.rows.add(data.nodes);
+	leaderboardTable.draw();
+	//leaderboardTable.data(data.nodes);
+});
 
 onresize = (event) => {
 	onCanvasResize();
