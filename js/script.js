@@ -31,19 +31,28 @@ var minPings = 2;
 var searchUsername = "";
 var performanceMode = navigator.userAgent.startsWith("Mozilla") ? true : false;
 
+var isLoading = true;
+
 var uiContainer;
 
 var streamerDropdown;
 var yearDropdown;
 var timeframeDropdown;
 var pingTypeDropdown;
+var loadButton;
 
 var minPingsLabel;
 var minPingsSlider;
+var filterButton;
+
 var searchField;
+var searchButton;
+
 var performanceModeCheckbox;
 
 var leaderboardTable;
+
+var loadingContainer;
 
 function saveUserDataToLocalStorage() {
 	if (!localStorage) {
@@ -165,6 +174,7 @@ window.onMinPingsInput = function(newValue) {
 }
 
 window.onFilterKeyUp = function(event) {
+	if(isLoading) return;
 	if (event.key !== "Enter") return;
 	filter();
 }
@@ -174,6 +184,7 @@ window.onFilter = function() {
 }
 
 window.onSearchKeyUp = function(event) {
+	if(isLoading) return;
 	if (event.key !== "Enter") return;
 	search();
 }
@@ -187,7 +198,8 @@ window.onSearchClick = function() {
 	search();
 }
 
-window.onApply = function(event) {
+window.onLoadClick = function(event) {
+	disableUI();
 	loadNewMap();
 }
 
@@ -215,6 +227,28 @@ function search() {
 function filter() {
 	leaderboardTable.clear().draw();
 	onFilterRequested(minPings);
+}
+
+function enableUI() {
+	isLoading = false;
+
+	loadButton.classList.remove("disabled");
+	filterButton.classList.remove("disabled");
+	searchButton.classList.remove("disabled");
+	performanceModeCheckbox.classList.remove("disabled");
+
+	loadingContainer.classList.add("hidden");
+}
+
+function disableUI() {
+	isLoading = true;
+
+	loadButton.classList.add("disabled");
+	filterButton.classList.add("disabled");
+	searchButton.classList.add("disabled");
+	performanceModeCheckbox.classList.add("disabled");
+
+	loadingContainer.classList.remove("hidden");
 }
 
 function populateStreamerDropdown() {
@@ -294,15 +328,24 @@ function createSelectOption(select, text, value) {
 
 window.onload = (event) => {
 	uiContainer = document.getElementById("ui-container");
+
 	streamerDropdown = document.getElementById("streamer-dropdown");
 	yearDropdown = document.getElementById("year-dropdown");
 	timeframeDropdown = document.getElementById("timeframe-dropdown");
 	pingTypeDropdown = document.getElementById("ping-type-dropdown");
 
+	loadButton = document.getElementById("load-button");
+
 	minPingsLabel = document.getElementById("min-pings-label");
 	minPingsSlider = document.getElementById("min-pings-slider");
+	filterButton = document.getElementById("filter-button");
+
 	searchField = document.getElementById("search-field");
+	searchButton = document.getElementById("search-button");
+
 	performanceModeCheckbox = document.getElementById("performance-mode-checkbox");
+
+	loadingContainer = document.getElementById("loading-container");
 
 	leaderboardTable = new DataTable('#leaderboard-table', {
 		// options
@@ -412,6 +455,8 @@ onMapLoaded((data) => {
 	leaderboardTable.rows.add(data.nodes);
 	leaderboardTable.columns.adjust();
 	leaderboardTable.draw();
+
+	enableUI();
 });
 
 onresize = (event) => {

@@ -40,7 +40,7 @@
 					<select class="dropdown" id="timeframe-dropdown" onchange="onTimeframeChange(this)"></select>
 					<select class="dropdown" id="ping-type-dropdown" onchange="onPingTypeChange(this)"></select>
 	
-					<button class="button" onclick="onApply()">Load</button>
+					<button class="button disabled" id="load-button" onclick="onLoadClick()">Load</button>
 				</div>
 
 				<div class="info-container">
@@ -92,16 +92,16 @@
 					<span class="filter-label text-shadow">Min Pings:</span>
 					<span class="filter-label min-pings-label text-shadow" id="min-pings-label">2</span>
 					<input type="range" min="0" max="100" value="2" class="slider" id="min-pings-slider" oninput="onMinPingsInput(this.value)" onkeyup="onFilterKeyUp(event)"></input>
-					<button class="button" onclick="onFilter()">Filter</button>
+					<button class="button disabled" id="filter-button" onclick="onFilter()">Filter</button>
 	
 					<input class="search-field" id="search-field" type="text" placeholder="Username" oninput="onSearchInput(this.value)" onkeyup="onSearchKeyUp(event)">
-						<button class="button" onclick="onSearchClick(event)">Search</button>
+						<button class="button disabled" id="search-button" onclick="onSearchClick(event)">Search</button>
 					</input>
 				</div>
 
 				<div class="performance-mode-container">
 					<span class="filter-label text-shadow">Performance Mode</span>
-					<input type="checkbox" class="checkbox" id="performance-mode-checkbox" name="performance-mode-checkbox" onchange="onPerformanceModeChange(this)" />
+					<input type="checkbox" class="checkbox disabled" id="performance-mode-checkbox" name="performance-mode-checkbox" onchange="onPerformanceModeChange(this)" />
 				</div>
 
 				<div class="leaderboard-container">
@@ -120,5 +120,9 @@
 				</div>
 			</div>
 		</div>	
+
+		<div class="loading-container" id="loading-container">
+			<div class="loading-icon"></div>
+		</div>
 	</body>
 </html>

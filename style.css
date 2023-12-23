@@ -101,6 +101,32 @@ tr td {
 	visibility: hidden;
 }
 
+.loading-container {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.loading-icon {
+	border: 1rem solid var(--pico-subtle-grey);
+	border-top: 1rem solid var(--pico-primary);
+	border-radius: 50%;
+	width: 3em;
+	height: 3rem;
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
 .map-container {
 	width: 100%;
 	height: 100%;
@@ -379,6 +405,11 @@ tr td {
 
 .third-place {
 	background-color: rgba(205, 127, 50, 0.75);
+}
+
+.disabled {
+	pointer-events: none;
+	opacity: .5;
 }
 
 #min-pings-slider {
