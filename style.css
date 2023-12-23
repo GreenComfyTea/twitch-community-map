@@ -8,13 +8,14 @@
 	--spacing: 0.25rem;
 	--form-element-spacing-vertical: 0.25rem;
 
-	--streamer-color: #ff5c81;
-	--moderator-color: #00bf03;
-	--vip-color: #ff00d0;
-	--partner-color: #00caff;
-	--subscriber-color: #a947ff;
-	
-	--viewer-color: #1c8c74;
+	--streamer-color: #ff5e7e;
+	--staff-color: #88FF00;
+	--moderator-color: #00ad03;
+	--vip-color: #e005b9;
+	--artist-color: #1aafff;
+	--partner-color: #ffd466;
+	--subscriber-color: #a951fb;
+	--viewer-color: #009978;
 
 	--background-color: rgb(15, 15, 15);
 
@@ -225,12 +226,20 @@ tr td {
 	background-color: var(--streamer-color);
 }
 
+.staff-circle {
+	background-color: var(--staff-color);
+}
+
 .moderator-circle {
 	background-color: var(--moderator-color);
 }
 
 .vip-circle {
 	background-color: var(--vip-color);
+}
+
+.artist-circle {
+	background-color: var(--artist-color);
 }
 
 .partner-circle {
@@ -261,12 +270,20 @@ tr td {
 	color: var(--streamer-color);
 }
 
+.staff-type {
+	color: var(--staff-color);
+}
+
 .moderator-type {
 	color: var(--moderator-color);
 }
 
 .vip-type {
 	color: var(--vip-color);
+}
+
+.artist-type {
+	color: var(--artist-color);
 }
 
 .partner-type {

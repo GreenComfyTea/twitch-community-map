@@ -3,26 +3,25 @@ import Stats from "https://cdnjs.cloudflare.com/ajax/libs/stats.js/r17/Stats.js"
 // const DEBUG = false;
 
 const colors = {
-	Streamer: "#ff5c81",
-	Moderator: "#00bf03",
-	VIP: "#ff00d0",
-	Artist: "#ffffff",
-	Staff: "#ff0000",
-	Partner: "#00caff",
-	Subscriber: "#a947ff",
-	//Subscriber: "#4d88ff",
-	Viewer: "#1c8c74",
+	Streamer: "#ff5e7e",
+	Staff: "#88FF00",
+	Moderator: "#00ad03",  //!!
+	VIP: "#e005b9",
+	Artist: "#1aafff", //!!
+	Partner: "#ffd466",
+	Subscriber: "#a951fb",
+	Viewer: "#009978",
 };
 
 const outlineColors = {
-	Streamer: "#7f2e40",
-	Moderator: "#005f01",
-	VIP: "#7f0068",
-	Artist: "#000000",
-	Staff: "#ff0000",
-	Partner: "#00657f",
-	Subscriber: "#48237f",
-	Viewer: "#0a332a",
+	Streamer: "#7f2f3f",
+	Staff: "#447f00",
+	Moderator: "#005601",
+	VIP: "#70025c",
+	Artist: "#0d577f",
+	Partner: "#7f6a33",
+	Subscriber: "#54287d",
+	Viewer: "#004c3c",
 };
 
 var onMapLoadedCallback = (data) => {};
