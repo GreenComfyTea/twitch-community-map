@@ -18,3 +18,12 @@ Gephi Simulation:
 4. Label Adjust
     - Speed = 1.0
     - Include Node Size = Off
+
+
+
+
+## TODO
+
+1) Fix hachu link types for Staff and Artists
+2) Make UI calls async
+3) Make Hide buttons for Info and Leaderboard
