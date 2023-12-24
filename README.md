@@ -5,7 +5,7 @@ Gephi Simulation:
     - Space Size = 2500.0
 2. Yifan Hu
     - Optimal Distance = 500.0
-    - Relative Strength = 0.01
+    - Relative Strength = 0.1
     - Initial Step Size = 5.0
     - Step Ratio = 0.5
     - Adaptive Cooling = On
@@ -24,5 +24,4 @@ Gephi Simulation:
 
 ## TODO
 
-1) Fix hachu link types for Staff and Artists
-2) Make Hide buttons for Info and Leaderboard
+1) Make Hide buttons for Info and Leaderboard
