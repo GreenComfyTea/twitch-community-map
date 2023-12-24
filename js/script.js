@@ -22,7 +22,6 @@ const pingTypeNames = {
 	"pingsSent": "Pings Sent"
 }
 
-
 const dummyAsync = async () => {};
 
 var streamer = "HAchubby";
@@ -194,7 +193,7 @@ window.onFilterKeyUp = async function(event) {
 	filter();
 }
 
-window.onFilter = async function() {
+window.onFilterClick = async function() {
 	await dummyAsync();
 	filter();
 }
@@ -250,10 +249,13 @@ function search() {
 	tableRow.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
 }
 
-async function filter() {
+function filter() {
 	disableUI();
 	leaderboardTable.clear().draw();
-	filterNodes(minPings);
+	
+	setTimeout(() => {
+		filterNodes(minPings);
+	}, 0);
 }
 
 function enableUI() {

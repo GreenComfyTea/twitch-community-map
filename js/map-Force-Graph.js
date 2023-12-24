@@ -24,6 +24,8 @@ const outlineColors = {
 	Viewer: "#004c3c",
 };
 
+const dummyAsync = async () => {};
+
 var onMapLoadedCallback = (data) => {};
 
 const outlineProportion = 0.15;
