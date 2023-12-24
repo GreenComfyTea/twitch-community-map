@@ -115,11 +115,11 @@ tr td {
 }
 
 .loading-icon {
-	border: 1rem solid var(--pico-subtle-grey);
-	border-top: 1rem solid var(--pico-primary);
+	border: 1.1rem solid rgb(250, 250, 250);
+	border-top: 1.1rem solid var(--pico-primary);
 	border-radius: 50%;
-	width: 3em;
-	height: 3rem;
+	width: 4em;
+	height: 4rem;
 	animation: spin 1s linear infinite;
 }
 
