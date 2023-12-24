@@ -25,3 +25,4 @@ Gephi Simulation:
 ## TODO
 
 1) Make Hide buttons for Info and Leaderboard
+2) Style for Tooltip
