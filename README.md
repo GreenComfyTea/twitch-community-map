@@ -25,5 +25,4 @@ Gephi Simulation:
 ## TODO
 
 1) Fix hachu link types for Staff and Artists
-2) Make UI calls async
-3) Make Hide buttons for Info and Leaderboard
+2) Make Hide buttons for Info and Leaderboard
