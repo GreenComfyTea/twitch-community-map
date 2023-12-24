@@ -75,11 +75,11 @@ function loadMap(streamer, year, timeframe, pingType, minPings, newPerformanceMo
 	if (timeframe !== "year") fileName = `${fileName}_${timeframe}`;
 	fileName = `${fileName}_${pingType}`;
 
-	// console.log(`./data/${streamer}/${year}/${timeframe}/${fileName}.json`);
+	//console.log(`./data/${streamer}/${year}/${timeframe}/${fileName}.json`);
 
 	fetch(`./data/${streamer}/${year}/${timeframe}/${fileName}.json`)
     .then((response) => response.json())
-    .then((json) => {
+    .then(async (json) => {
 		data = json;
 		preprocessData(data, pingType);
 		const dataCopy = structuredClone(data);
@@ -402,20 +402,18 @@ function createGraph(data) {
 		.zoomToFit(500, -1500, () => true);
 }
 
-function onFilterRequested(minPings) {
+function filterNodes(minPings) {
 	const dataCopy = structuredClone(data);
 	filterData(dataCopy, minPings);
 	createGraph(dataCopy);
 }
 
-function onSearchRequested(userName) {
-
+function searchNode(userName) {
 	const padding = 0.25 * Math.min(window.innerWidth, window.innerHeight);
-
 	map.zoomToFit(1000, padding, (node) => node.name === userName);
 }
 
-function onCanvasResize() {
+function resizeCanvas() {
 	if (map === undefined) return;
 
 	bottomLimit = limit * window.innerHeight;
@@ -427,13 +425,13 @@ function onCanvasResize() {
 	map.height(window.innerHeight);
 }
 
-function onMapLoaded(callback) {
-	onMapLoadedCallback = callback;
-}
-
-function onPerformanceModeChange(newPerformanceMode) {
+function changePerformanceMode(newPerformanceMode) {
 	performanceMode = newPerformanceMode;
 	map.autoPauseRedraw(false);
 }
 
-export {loadMap, data as mapData, onCanvasResize, onSearchRequested, onFilterRequested, onPerformanceModeChange, onMapLoaded};
+function onMapLoaded(callback) {
+	onMapLoadedCallback = callback;
+}
+
+export {loadMap, data as mapData, resizeCanvas, filterNodes, searchNode, changePerformanceMode, onMapLoaded};

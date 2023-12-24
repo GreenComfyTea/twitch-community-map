@@ -1,5 +1,5 @@
 import { onDataLoaded, loadData, data } from "./data-loader.js";
-import { loadMap, mapData, onCanvasResize, onFilterRequested, onSearchRequested, onPerformanceModeChange, onMapLoaded } from "./map-Force-Graph.js";
+import { loadMap, mapData, resizeCanvas, filterNodes, searchNode, changePerformanceMode, onMapLoaded } from "./map-Force-Graph.js";
 
 const timeframeNames = {
 	"year": "Year",
@@ -21,6 +21,9 @@ const pingTypeNames = {
 	"pingsReceived": "Pings Received",
 	"pingsSent": "Pings Sent"
 }
+
+
+const dummyAsync = async () => {};
 
 var streamer = "HAchubby";
 var year = "2022";
@@ -138,7 +141,9 @@ function loadUserDataFromLocalStorage() {
 	}
 }
 
-window.onStreamerChange = function(selected) {
+window.onStreamerChange = async function(selected) {
+	await dummyAsync();
+	
 	streamer = selected.value;
 	saveUserDataToLocalStorage();
 
@@ -147,7 +152,9 @@ window.onStreamerChange = function(selected) {
 	populatePingTypeDropdowns();
 }
 
-window.onYearChange = function(selected) {
+window.onYearChange = async function(selected) {
+	await dummyAsync();
+
 	year = selected.value;
 	saveUserDataToLocalStorage();
 
@@ -155,59 +162,78 @@ window.onYearChange = function(selected) {
 	populatePingTypeDropdowns();
 }
 
-window.onTimeframeChange = function(selected) {
+window.onTimeframeChange = async function(selected) {
+	await dummyAsync();
+
 	timeframe = selected.value;
 	saveUserDataToLocalStorage();
 
 	populatePingTypeDropdowns();
 }
 
-window.onPingTypeChange = function(selected) {
+window.onPingTypeChange = async function(selected) {
+	await dummyAsync();
+
 	pingType = selected.value;
 	saveUserDataToLocalStorage();
 }
 
-window.onMinPingsInput = function(newValue) {
+window.onMinPingsInput = async function(newValue) {
+	await dummyAsync();
+
 	minPingsLabel.textContent = newValue;
 	minPings = newValue;
 	saveUserDataToLocalStorage();
 }
 
-window.onFilterKeyUp = function(event) {
+window.onFilterKeyUp = async function(event) {
+	await dummyAsync();
+
 	if(isLoading) return;
 	if (event.key !== "Enter") return;
 	filter();
 }
 
-window.onFilter = function() {
+window.onFilter = async function() {
+	await dummyAsync();
 	filter();
 }
 
-window.onSearchKeyUp = function(event) {
+window.onSearchKeyUp = async function(event) {
+	await dummyAsync();
+
 	if(isLoading) return;
 	if (event.key !== "Enter") return;
 	search();
 }
 
-window.onSearchInput = function(newValue) {
+window.onSearchInput = async function(newValue) {
+	await dummyAsync();
+
 	searchUsername = newValue;
 	saveUserDataToLocalStorage();
 }
 
-window.onSearchClick = function() {
+window.onSearchClick = async function() {
+	await dummyAsync();
+
 	search();
 }
 
-window.onLoadClick = function(event) {
+window.onLoadClick = async function(event) {
+	await dummyAsync();
+
 	disableUI();
 	loadNewMap();
 }
 
-window.onPerformanceModeChange = function(checkbox) {
+window.onPerformanceModeChange = async function(checkbox) {
+	await dummyAsync();
+
 	performanceMode = checkbox.checked === true ? true : false;
 	saveUserDataToLocalStorage();
 
-	onPerformanceModeChange(performanceMode);
+	changePerformanceMode(performanceMode);
 }
 
 function search() {
@@ -215,7 +241,7 @@ function search() {
 
 	const searchUsernameTemp = searchUsername.trim().toLowerCase();
 
-	onSearchRequested(searchUsernameTemp);
+	searchNode(searchUsernameTemp);
 
 	const tableRow = document.getElementById(searchUsernameTemp);
 
@@ -224,9 +250,10 @@ function search() {
 	tableRow.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
 }
 
-function filter() {
+async function filter() {
+	disableUI();
 	leaderboardTable.clear().draw();
-	onFilterRequested(minPings);
+	filterNodes(minPings);
 }
 
 function enableUI() {
@@ -262,6 +289,8 @@ function populateStreamerDropdown() {
 	if(!streamers.includes(streamer)) {
 		streamer = streamers[0];
 	}
+
+
 	streamerDropdown.value = streamer;
 }
 
@@ -274,7 +303,7 @@ function populateYearDropdowns() {
 	years.forEach((year) => createSelectOption(yearDropdown, year, year));
 
 	if(!years.includes(parseInt(year))) {
-		year = years[0];
+		year = years[years.length - 1];
 	}
 
 	yearDropdown.value = year;
@@ -289,9 +318,9 @@ function populateTimeframeDropdowns() {
 
 	timeframeDropdown.textContent = "";
 	timeframes.forEach((timeframe) => createSelectOption(timeframeDropdown, timeframe.text, timeframe.value));
-
-	if (!timeframes.some((dropdownTimeframe) => dropdownTimeframe.value.localeCompare(timeframe))) {
-		timeframe = timeframes[0].value;
+	
+	if (!timeframes.some((dropdownTimeframe) => dropdownTimeframe.value.localeCompare(timeframe) === 0)) {
+		timeframe = timeframes[timeframes.length - 1].value;
 	}
 
 	timeframeDropdown.value = timeframe;
@@ -307,16 +336,11 @@ function populatePingTypeDropdowns() {
 	pingTypeDropdown.textContent = "";
 	pingTypes.forEach((pingType) => createSelectOption(pingTypeDropdown, pingType.text, pingType.value));
 
-	if (!pingTypes.some((dropdownPingType) => dropdownPingType.value.localeCompare(pingType))) {
+	if (!pingTypes.some((dropdownPingType) => dropdownPingType.value.localeCompare(pingType) === 0)) {
 		pingType = pingTypes[0].value;
 	}
 
 	pingTypeDropdown.value = pingType;
-}
-
-function loadNewMap() {
-	leaderboardTable.clear().draw();
-	loadMap(streamer, year, timeframe, pingType, minPings, performanceMode);
 }
 
 function createSelectOption(select, text, value) {
@@ -326,7 +350,20 @@ function createSelectOption(select, text, value) {
     select.appendChild(option);
 }
 
-window.onload = (event) => {
+function loadNewMap() {
+	leaderboardTable.clear().draw();
+	loadMap(streamer, year, timeframe, pingType, minPings, performanceMode);
+}
+
+async function loadNewData() {
+	await dummyAsync();
+
+	loadData();
+}
+
+onload = async (event) => {
+	await dummyAsync();
+
 	uiContainer = document.getElementById("ui-container");
 
 	streamerDropdown = document.getElementById("streamer-dropdown");
@@ -422,7 +459,7 @@ window.onload = (event) => {
 
 		if(!clickedUsername) return;
 
-		onSearchRequested(clickedUsername);
+		searchNode(clickedUsername);
 	});
 	
 	loadUserDataFromLocalStorage();
@@ -436,6 +473,8 @@ window.onload = (event) => {
 		populatePingTypeDropdowns();
 
 		uiContainer.classList.remove("hidden");
+
+		loadNewMap();
 	}
 	else {
 		onDataLoaded(() => {
@@ -445,10 +484,16 @@ window.onload = (event) => {
 			populatePingTypeDropdowns();
 
 			uiContainer.classList.remove("hidden");
+
+			loadNewMap();
 		});
 	}
+};
 
-	loadNewMap();
+onresize = async (event) => {
+	await dummyAsync();
+
+	resizeCanvas();
 };
 
 onMapLoaded((data) => {
@@ -459,8 +504,4 @@ onMapLoaded((data) => {
 	enableUI();
 });
 
-onresize = (event) => {
-	onCanvasResize();
-};
-
-loadData();
+loadNewData();
