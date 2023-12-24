@@ -79,7 +79,7 @@ function loadMap(streamer, year, timeframe, pingType, minPings, newPerformanceMo
 
 	fetch(`./data/${streamer}/${year}/${timeframe}/${fileName}.json`)
     .then((response) => response.json())
-    .then(async (json) => {
+    .then((json) => {
 		data = json;
 		preprocessData(data, pingType);
 		const dataCopy = structuredClone(data);
