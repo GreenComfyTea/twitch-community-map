@@ -586,6 +586,7 @@ tr td {
 	flex-direction: row;
 	margin: 0;
 	align-items: center;
+	pointer-events: none;
 }
 
 .stats-container {
@@ -596,7 +597,7 @@ tr td {
 	align-self: center;
 	vertical-align: middle;
 	gap: var(--double-margin);
-	pointer-events: none !important;
+	pointer-events: none;
 }
 
 .credits-container {
