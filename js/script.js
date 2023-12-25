@@ -1,5 +1,5 @@
 import { onDataLoaded, loadData, data } from "./data-loader.js";
-import { loadMap, mapData, resizeCanvas, filterNodes, searchNode, changePerformanceMode, onMapLoaded } from "./map-Force-Graph.js";
+import { loadMap, mapData, resizeCanvas, filterNodes, searchNode, searchNextNode, changePerformanceMode, onMapLoaded } from "./map-Force-Graph.js";
 
 const timeframeNames = {
 	"year": "Year",
@@ -33,6 +33,10 @@ var minPings = 2;
 var searchUsername = "";
 var performanceMode = navigator.userAgent.startsWith("Mozilla") ? true : false;
 
+var isInfoCollapsed = false;
+var isLeaderboardCollapsed = false;
+var isStatsCollapsed = false;
+
 var isLoading = true;
 
 var uiContainer;
@@ -52,7 +56,18 @@ var searchButton;
 
 var performanceModeCheckbox;
 
+var userCountElement;
+var linkCountElement;
+
+var infoContainer;
+var infoCollapseArrow;
+
+var leaderboardContainer;
+var leaderboardCollapseArrow;
 var leaderboardTable;
+
+var statsContainer;
+var statsCollapseArrow;
 
 var loadingContainer;
 
@@ -235,51 +250,31 @@ window.onPerformanceModeChange = async (checkbox) => {
 	changePerformanceMode(performanceMode);
 };
 
-var isInfoCollapsed = false;
-var isLeaderboardCollapsed = false;
-
 window.onInfoCollapseClick = async (event) => {
 	await dummyAsync();
 
-	const infoContainer = document.getElementById("info-container");
-	const infoCollapseArrow = document.getElementById("info-collapse-arrow");
-
-	if(isInfoCollapsed) {
-		infoContainer.classList.add("expand-to-right-animation");
-		infoContainer.classList.remove("collapse-to-left-animation");
-
-		infoCollapseArrow.classList.remove("flip-arrow");
-	}
-	else {
-		infoContainer.classList.add("collapse-to-left-animation");
-		infoContainer.classList.remove("expand-to-right-animation");
-
-		infoCollapseArrow.classList.add("flip-arrow");
-	}
-
 	isInfoCollapsed = !isInfoCollapsed;
+	updateInfoCollapse();
 };
 
 window.onLeaderboardCollapseClick = async (event) => {
 	await dummyAsync();
 
-	const leaderboardContainer = document.getElementById("leaderboard-container");
-	const leaderboardCollapseArrow = document.getElementById("leaderboard-collapse-arrow");
-
-	if(isLeaderboardCollapsed) {
-		leaderboardContainer.classList.add("expand-to-left-animation");
-		leaderboardContainer.classList.remove("collapse-to-right-animation");
-
-		leaderboardCollapseArrow.classList.add("flip-arrow");
-	}
-	else {
-		leaderboardContainer.classList.add("collapse-to-right-animation");
-		leaderboardContainer.classList.remove("expand-to-left-animation");
-
-		leaderboardCollapseArrow.classList.remove("flip-arrow");
-	}
-
 	isLeaderboardCollapsed = !isLeaderboardCollapsed;
+	updateLeaderboardCollapse();
+};
+
+window.onStatsCollapseClick = async (event) => {
+	await dummyAsync();
+
+	isStatsCollapsed = !isStatsCollapsed;
+	updateStatsCollapse();
+};
+
+window.onSearchNextUser = async (userType) => {
+	await dummyAsync();
+
+	searchNextUser(userType);
 };
 
 function search() {
@@ -290,6 +285,16 @@ function search() {
 	searchNode(searchUsernameTemp);
 
 	const tableRow = document.getElementById(searchUsernameTemp);
+
+	if (!tableRow) return;
+
+	tableRow.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+}
+
+function searchNextUser(userType) {
+	const nextUser = searchNextNode(userType);
+
+	const tableRow = document.getElementById(nextUser);
 
 	if (!tableRow) return;
 
@@ -399,6 +404,53 @@ function createSelectOption(select, text, value) {
     select.appendChild(option);
 }
 
+function updateInfoCollapse() {
+	if(isInfoCollapsed) {
+		infoContainer.classList.add("collapse-left-animation");
+		infoContainer.classList.remove("expand-right-animation");
+
+		infoCollapseArrow.classList.add("flip-arrow");
+	}
+	else {
+		infoContainer.classList.add("expand-right-animation");
+		infoContainer.classList.remove("collapse-left-animation");
+
+		infoCollapseArrow.classList.remove("flip-arrow");
+	}
+}
+
+function updateLeaderboardCollapse() {
+	if(isLeaderboardCollapsed) {
+		leaderboardContainer.classList.add("collapse-to-right-animation");
+		leaderboardContainer.classList.remove("expand-to-left-animation");
+
+		leaderboardCollapseArrow.classList.remove("flip-arrow");
+	}
+	else {
+		leaderboardContainer.classList.add("expand-to-left-animation");
+		leaderboardContainer.classList.remove("collapse-to-right-animation");
+
+		leaderboardCollapseArrow.classList.add("flip-arrow");
+	}
+}
+
+function updateStatsCollapse() {
+	if(isStatsCollapsed) {
+		statsContainer.classList.add("collapse-down-animation");
+		statsContainer.classList.remove("expand-up-animation");
+
+		statsCollapseArrow.classList.add("rotate-up-arrow");
+		statsCollapseArrow.classList.remove("rotate-down-arrow");
+	}
+	else {
+		statsContainer.classList.add("expand-up-animation");
+		statsContainer.classList.remove("collapse-down-animation");
+
+		statsCollapseArrow.classList.add("rotate-down-arrow");
+		statsCollapseArrow.classList.remove("rotate-up-arrow");
+	}
+}
+
 function loadNewMap() {
 	leaderboardTable.clear().draw();
 	loadMap(streamer, year, timeframe, pingType, minPings, performanceMode);
@@ -430,6 +482,18 @@ onload = async (event) => {
 	searchButton = document.getElementById("search-button");
 
 	performanceModeCheckbox = document.getElementById("performance-mode-checkbox");
+
+	userCountElement = document.getElementById("user-count");
+	linkCountElement = document.getElementById("link-count");
+
+	infoContainer = document.getElementById("info-container");
+	infoCollapseArrow = document.getElementById("info-collapse-arrow");
+
+	leaderboardContainer = document.getElementById("leaderboard-container");
+	leaderboardCollapseArrow = document.getElementById("leaderboard-collapse-arrow");
+
+	statsContainer = document.getElementById("stats-container");
+	statsCollapseArrow = document.getElementById("stats-collapse-arrow");
 
 	loadingContainer = document.getElementById("loading-container");
 
@@ -504,16 +568,17 @@ onload = async (event) => {
 			}
 
 			row.classList.add("table-text-shadow");
+			row.classList.add("table-text");
 		}
 	});
 
-	leaderboardTable.on('click', 'tbody tr', async () => {
+	leaderboardTable.on("click", "tbody tr", async (event) => {
 		await dummyAsync();
 
-		const node = leaderboardTable.row(this).data();
-		if(!node) return;
+		if(!event) return;
+		if(!event.currentTarget) return;
 
-		const clickedUsername = node.name;
+		const clickedUsername = event.currentTarget.id;
 
 		if(!clickedUsername) return;
 
@@ -558,6 +623,9 @@ onMapLoaded((data) => {
 	leaderboardTable.rows.add(data.nodes);
 	leaderboardTable.columns.adjust();
 	leaderboardTable.draw();
+
+	userCountElement.textContent = data.nodes.length;
+	linkCountElement.textContent = data.links.length;
 
 	enableUI();
 });

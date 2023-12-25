@@ -16,9 +16,12 @@
 	--artist-color: #1aafff;
 	--partner-color: #ffd466;
 	--subscriber-color: #a951fb;
+	--bot-color: #a0a0a0;
 	--viewer-color: #009978;
 
-	--tcm-background-color: rgb(0, 0, 0);
+	--text-shadow-width: 0.125rem;
+	--negative-text-shadow-width: -0.125rem;
+	--new-background-color: rgb(0, 0, 0);
 
 	--pico-primary: #008dd3;
 	--pico-outline: #374956;
@@ -28,7 +31,7 @@
 body {
 	width: 100dvw;
 	height: 100dvh;
-	background-color: var(--tcm-background-color);
+	background-color: var(--new-background-color);
 	overflow: hidden;
 	position: relative;
 }
@@ -82,19 +85,6 @@ th {
 	white-space: nowrap;
 }
 
-tr {
-	font-size: 1rem;
-	text-shadow:
-		-0.1rem	-0.1rem	0 rgb(0, 0, 0),
-		 0		-0.1rem	0 rgb(0, 0, 0),
-		 0.1rem	-0.1rem	0 rgb(0, 0, 0),
-		 0.1rem	 0		0 rgb(0, 0, 0),
-		 0.1rem	 0.1rem	0 rgb(0, 0, 0),
-		 0		 0.1rem	0 rgb(0, 0, 0),
-		-0.1rem	 0.1rem	0 rgb(0, 0, 0),
-		-0.1rem	 0		0 rgb(0, 0, 0); 
-}
-
 tr th {
 	border-bottom-color: #424242;
 }
@@ -136,7 +126,7 @@ tr td {
 .map-container {
 	width: 100%;
 	height: 100%;
-	background-color: var(--tcm-background-color);
+	background-color: var(--new-background-color);
 }
 
 .graph-tooltip {
@@ -192,17 +182,14 @@ tr td {
 
 .info-container {
 	position: relative;
-	top: -2.25rem;
+	top: -2.7rem;
 }
 
 .collapse-arrow-container {
 	pointer-events: all;
 	cursor: pointer;
 	width: fit-content;
-	margin-left: 0.89rem;
-	margin-top: var(--default-margin);
-	margin-right: var(--default-margin);
-	margin-bottom: 0;
+	margin: var(--default-margin);
 }
 
 .collapse-arrow-container:hover {
@@ -213,25 +200,37 @@ tr td {
 	filter: brightness(200%);
 }
 
+.info-collapse-arrow-container {
+	margin-top: 0.75rem;
+}
+
 .collapse-arrow {
 	display: block;
 	margin: 0;
 	width: auto;
-	height: 1.6rem;
+	height: 1.4rem;
 	pointer-events: all;
 	cursor: pointer;
-	stroke: var(--tcm-background-color);
+	stroke: var(--new-background-color);
 	stroke-width: 2rem;
 	stroke-linejoin: round;
 	paint-order: stroke;
 }
 
-.collapse-to-left-animation {
-	animation: collapse-to-left 0.15s forwards ease-in-out 1;
+.collapse-left-animation {
+	animation: collapse-left 0.15s forwards ease-in-out 1;
 }
 
-.expand-to-right-animation {
-	animation: expand-to-right 0.15s forwards ease-in-out 1;
+.expand-right-animation {
+	animation: expand-right 0.15s forwards ease-in-out 1;
+}
+
+.collapse-down-animation {
+	animation: collapse-down 0.15s forwards ease-in-out 1;
+}
+
+.expand-up-animation {
+	animation: expand-up 0.15s forwards ease-in-out 1;
 }
 
 .collapse-to-right-animation {
@@ -242,12 +241,12 @@ tr td {
 	animation: expand-to-left 0.15s forwards ease-in-out 1;
 }
 
-@keyframes collapse-to-left {
+@keyframes collapse-left {
 	0% { transform: translateX(0); }
 	100% { transform: translateX(-110%); }
 }
 
-@keyframes expand-to-right {
+@keyframes expand-right {
 	0% { transform: translateX(-110%); }
 	100% { transform: translateX(0%); }
 }
@@ -262,8 +261,26 @@ tr td {
 	100% { transform: translateX(0%); }
 }
 
+@keyframes collapse-down {
+	0% { transform: translateY(0); }
+	100% { transform: translateY(110%); }
+}
+
+@keyframes expand-up {
+	0% { transform: translateY(110%); }
+	100% { transform: translateY(0%); }
+}
+
 .flip-arrow {
 	transform: scaleX(-1);
+}
+
+.rotate-up-arrow {
+	transform: rotate(90deg);
+}
+
+.rotate-down-arrow {
+	transform: rotate(-90deg);
 }
 
 .title {
@@ -302,9 +319,19 @@ tr td {
 	width: 2rem;
 	background-color: #fff;
 	border-style: solid;
-	border-color: var(--tcm-background-color);
+	border-color: var(--new-background-color);
 	border-radius: 50%;
 	border-width: 0.2rem;
+	pointer-events: all;
+	cursor: pointer;
+}
+
+.legend-circle:hover {
+	filter: brightness(150%);
+}
+
+.legend-circle:active {
+	filter: brightness(200%);
 }
 
 .streamer-circle {
@@ -335,20 +362,39 @@ tr td {
 	background-color: var(--subscriber-color);
 }
 
+.bot-circle {
+	background-color: var(--bot-color);
+}
+
 .viewer-circle {
 	background-color: var(--viewer-color);
 }
 
 .text-shadow {
 	text-shadow:
-		-0.125rem	-0.125rem	0 rgb(0, 0, 0),
-		 0			-0.125rem	0 rgb(0, 0, 0),
-		 0.125rem	-0.125rem	0 rgb(0, 0, 0),
-		 0.125rem	 0			0 rgb(0, 0, 0),
-		 0.125rem	 0.125rem	0 rgb(0, 0, 0),
-		 0			 0.125rem	0 rgb(0, 0, 0),
-		-0.125rem	 0.125rem	0 rgb(0, 0, 0),
-		-0.125rem	 0			0 rgb(0, 0, 0);
+		var(--negative-text-shadow-width)	var(--negative-text-shadow-width)	0 var(--new-background-color),
+		var(--negative-text-shadow-width)	0									0 var(--new-background-color),
+		var(--negative-text-shadow-width)	var(--text-shadow-width)			0 var(--new-background-color),
+		0									var(--negative-text-shadow-width)	0 var(--new-background-color),
+		0			 						var(--text-shadow-width)			0 var(--new-background-color),
+		var(--text-shadow-width)			var(--negative-text-shadow-width)	0 var(--new-background-color),
+		var(--text-shadow-width)			0									0 var(--new-background-color),
+		var(--text-shadow-width)			var(--text-shadow-width)			0 var(--new-background-color);	
+}
+
+.type {
+	text-align: center;
+	margin-left: var(--default-margin);
+	pointer-events: all;
+	cursor: pointer;
+}
+
+.type:hover {
+	filter: brightness(150%);
+}
+
+.type:active {
+	filter: brightness(200%);
 }
 
 .streamer-type {
@@ -379,13 +425,12 @@ tr td {
 	color: var(--subscriber-color);
 }
 
-.viewer-type {
-	color: var(--viewer-color);
+.bot-type {
+	color: var(--bot-color);
 }
 
-.type {
-	text-align: center;
-	margin-left: var(--default-margin);
+.viewer-type {
+	color: var(--viewer-color);
 }
 
 .right-ui-container {
@@ -437,7 +482,7 @@ tr td {
 	-webkit-appearance: none;
 	border-style: solid;
 	border-width: 0.2rem;
-	border-color: var(--tcm-background-color);
+	border-color: var(--new-background-color);
 	background-color: var(--pico-subtle-grey);
 	height: 0.6rem;
 }
@@ -478,6 +523,7 @@ tr td {
 
 .leaderboard-container {
 	margin: var(--default-margin);
+	margin-top: 0;
 	padding: var(--default-margin);
 	padding-top: 0;
 	background-color: rgba(15, 15, 15, 0.5);
@@ -487,6 +533,25 @@ tr td {
 	border-radius: 0.5rem;
 	pointer-events: all;
 	overflow: hidden;
+}
+
+.table-text {
+	font-size: 0.9rem;
+}
+
+.table-text-shadow {
+	--width: 0.1rem;
+	--negative-width: -0.1rem;
+
+	text-shadow:
+		var(--negative-width)	var(--negative-width)	0 var(--new-background-color),
+		var(--negative-width)	0						0 var(--new-background-color),
+		var(--negative-width)	var(--width)			0 var(--new-background-color),
+		0						var(--negative-width)	0 var(--new-background-color),
+		0			 			var(--width)			0 var(--new-background-color),
+		var(--width)			var(--negative-width)	0 var(--new-background-color),
+		var(--width)			0						0 var(--new-background-color),
+		var(--width)			var(--width)			0 var(--new-background-color);
 }
 
 .dataTables_scrollBody {
@@ -511,6 +576,26 @@ tr td {
 
 .third-place {
 	background-color: rgba(205, 127, 50, 0.75);
+}
+
+.collapsible-stats-container {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	display: flex;
+	flex-direction: row;
+	margin: 0;
+	align-items: center;
+}
+
+.stats-container {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	align-self: center;
+	vertical-align: middle;
+	gap: var(--default-margin);
 }
 
 .disabled {

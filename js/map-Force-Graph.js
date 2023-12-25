@@ -5,11 +5,12 @@ import Stats from "https://cdnjs.cloudflare.com/ajax/libs/stats.js/r17/Stats.js"
 const colors = {
 	Streamer: "#ff5e7e",
 	Staff: "#88FF00",
-	Moderator: "#00ad03",  //!!
+	Moderator: "#00ad03",
 	VIP: "#e005b9",
-	Artist: "#1aafff", //!!
+	Artist: "#1aafff",
 	Partner: "#ffd466",
 	Subscriber: "#a951fb",
+	Bot: "#000000",
 	Viewer: "#009978",
 };
 
@@ -21,8 +22,21 @@ const outlineColors = {
 	Artist: "#0d577f",
 	Partner: "#7f6a33",
 	Subscriber: "#54287d",
+	Bot: "#ffffff",
 	Viewer: "#004c3c",
 };
+
+const lastUsersFound = {
+	Streamer: "",
+	Staff: "",
+	Moderator: "",
+	VIP: "",
+	Artist: "",
+	Partner: "",
+	Subscriber: "",
+	Bot: "",
+	Viewer: "",
+}
 
 const dummyAsync = async () => {};
 
@@ -411,8 +425,56 @@ function filterNodes(minPings) {
 	createGraph(dataCopy);
 }
 
+function searchNextNode(userType) {
+	let firstUser;
+	const lastUser = lastUsersFound[userType];
+
+	let isLastUserFound = false;
+
+	let nextUser;
+
+	for (const node of map.graphData().nodes) {
+		if(node.userType !== userType) continue;
+
+		if(!firstUser) {
+			firstUser = node.name;
+		}
+
+		if(!lastUser) {
+			nextUser = node.name;
+			lastUsersFound[userType] = nextUser;
+			break;
+		}
+
+		if(node.name.localeCompare(lastUser) === 0) {
+			isLastUserFound = true;
+			continue;
+		}
+
+		if(isLastUserFound) {
+			nextUser = node.name;
+			lastUsersFound[userType] = nextUser;
+			break;
+		}
+	}
+
+	if(!nextUser) {
+		if(!firstUser) return;
+
+		searchNode(firstUser);
+		return;
+	}
+
+	searchNode(nextUser);
+	return nextUser;
+}
+
 function searchNode(userName) {
 	const padding = 0.25 * Math.min(window.innerWidth, window.innerHeight);
+
+	const node = map.graphData().nodes.find((node) => node.name.localeCompare(userName) === 0);
+	if(node) lastUsersFound[node.userType] = userName;
+
 	map.zoomToFit(1000, padding, (node) => node.name.localeCompare(userName) === 0);
 }
 
@@ -437,4 +499,4 @@ function onMapLoaded(callback) {
 	onMapLoadedCallback = callback;
 }
 
-export {loadMap, data as mapData, resizeCanvas, filterNodes, searchNode, changePerformanceMode, onMapLoaded};
+export {loadMap, data as mapData, resizeCanvas, filterNodes, searchNode, searchNextNode, changePerformanceMode, onMapLoaded};

@@ -29,6 +29,7 @@
 		<!-- <script type="module" src="parser.js" defer></script> -->
 		<title>Twitch Community Map</title>
 	</head>
+
 	<body>
 		<div class="map-container" id="map"></div>
 		
@@ -44,7 +45,7 @@
 				</div>
 
 				<div class="collapsible-info-container">
-					<div class="collapse-arrow-container" onclick="onInfoCollapseClick()">
+					<div class="collapse-arrow-container info-collapse-arrow-container" onclick="onInfoCollapseClick()">
 						<svg class="collapse-arrow" id="info-collapse-arrow" width="120.64" height="122.88" viewBox="-14 0 148 122.88">
 							<path fill="b9c6ce" fill-rule="evenodd" d="M66.6,108.91c1.55,1.63,2.31,3.74,2.28,5.85c-0.03,2.11-0.84,4.2-2.44,5.79l-0.12,0.12c-1.58,1.5-3.6,2.23-5.61,2.2 c-2.01-0.03-4.02-0.82-5.55-2.37C37.5,102.85,20.03,84.9,2.48,67.11c-0.07-0.05-0.13-0.1-0.19-0.16C0.73,65.32-0.03,63.19,0,61.08 c0.03-2.11,0.85-4.21,2.45-5.8l0.27-0.26C20.21,37.47,37.65,19.87,55.17,2.36C56.71,0.82,58.7,0.03,60.71,0 c2.01-0.03,4.03,0.7,5.61,2.21l0.15,0.15c1.57,1.58,2.38,3.66,2.41,5.76c0.03,2.1-0.73,4.22-2.28,5.85L19.38,61.23L66.6,108.91 L66.6,108.91z M118.37,106.91c1.54,1.62,2.29,3.73,2.26,5.83c-0.03,2.11-0.84,4.2-2.44,5.79l-0.12,0.12 c-1.57,1.5-3.6,2.23-5.61,2.21c-2.01-0.03-4.02-0.82-5.55-2.37C89.63,101.2,71.76,84.2,54.24,67.12c-0.07-0.05-0.14-0.11-0.21-0.17 c-1.55-1.63-2.31-3.76-2.28-5.87c0.03-2.11,0.85-4.21,2.45-5.8C71.7,38.33,89.27,21.44,106.8,4.51l0.12-0.13 c1.53-1.54,3.53-2.32,5.54-2.35c2.01-0.03,4.03,0.7,5.61,2.21l0.15,0.15c1.57,1.58,2.38,3.66,2.41,5.76 c0.03,2.1-0.73,4.22-2.28,5.85L71.17,61.23L118.37,106.91L118.37,106.91z"/>
 						</svg>
@@ -62,36 +63,40 @@
 			
 						<div class="legend-container">
 							<div class="legend">
-								<span class="legend-circle streamer-circle"></span>
-								<span class="type text-shadow streamer-type">Streamer</span>
+								<span class="legend-circle streamer-circle" onclick="onSearchNextUser('Streamer')"></span>
+								<span class="type text-shadow streamer-type" onclick="onSearchNextUser('streamer')">Streamer</span>
 							</div>
 							<div class="legend">
-								<span class="legend-circle staff-circle"></span>
-								<span class="type text-shadow staff-type">Staff</span>
+								<span class="legend-circle staff-circle" onclick="onSearchNextUser('Staff')"></span>
+								<span class="type text-shadow staff-type" onclick="onSearchNextUser('Staff')">Staff</span>
 							</div>
 							<div class="legend">
-								<span class="legend-circle moderator-circle"></span>
-								<span class="type text-shadow moderator-type">Moderators</span>
+								<span class="legend-circle moderator-circle" onclick="onSearchNextUser('Moderator')"></span>
+								<span class="type text-shadow moderator-type" onclick="onSearchNextUser('Moderator')">Moderators</span>
 							</div>
 							<div class="legend">
-								<span class="legend-circle vip-circle"></span>
-								<span class="type text-shadow vip-type">VIPs</span>
+								<span class="legend-circle vip-circle" onclick="onSearchNextUser('VIP')"></span>
+								<span class="type text-shadow vip-type" onclick="onSearchNextUser('VIP')">VIPs</span>
 							</div>
 							<div class="legend">
-								<span class="legend-circle artist-circle"></span>
-								<span class="type text-shadow artist-type">Artists</span>
+								<span class="legend-circle artist-circle" onclick="onSearchNextUser('Artist')"></span>
+								<span class="type text-shadow artist-type" onclick="onSearchNextUser('Artist')">Artists</span>
 							</div>
 							<div class="legend">
-								<span class="legend-circle partner-circle"></span>
-								<span class="type text-shadow partner-type">Partners</span>
+								<span class="legend-circle partner-circle" onclick="onSearchNextUser('Partner')"></span>
+								<span class="type text-shadow partner-type" onclick="onSearchNextUser('Partner')">Partners</span>
 							</div>
 							<div class="legend">
-								<span class="legend-circle subscriber-circle"></span>
-								<span class="type text-shadow subscriber-type">Subscribers</span>
+								<span class="legend-circle subscriber-circle" onclick="onSearchNextUser('Subscriber')"></span>
+								<span class="type text-shadow subscriber-type" onclick="onSearchNextUser('Subscriber')">Subscribers</span>
 							</div>
 							<div class="legend">
-								<span class="legend-circle viewer-circle"></span>
-								<span class="type text-shadow viewer-type">Viewers</span>
+								<span class="legend-circle bot-circle" onclick="onSearchNextUser('Bot')"></span>
+								<span class="type text-shadow bot-type" onclick="onSearchNextUser('Bot')">Bots</span>
+							</div>
+							<div class="legend">
+								<span class="legend-circle viewer-circle" onclick="onSearchNextUser('Viewer')"></span>
+								<span class="type text-shadow viewer-type" onclick="onSearchNextUser('Viewer')">Viewers</span>
 							</div>
 						</div>
 					</div>
@@ -145,6 +150,26 @@
 
 		<div class="loading-container" id="loading-container">
 			<div class="loading-icon"></div>
+		</div>
+
+		<div class="collapsible-stats-container">
+			<div class="collapse-arrow-container" onclick="onStatsCollapseClick()">
+				<svg class="collapse-arrow rotate-down-arrow" id="stats-collapse-arrow" width="120.64" height="122.88" viewBox="-14 0 148 122.88">
+					<path fill="b9c6ce" fill-rule="evenodd" d="M66.6,108.91c1.55,1.63,2.31,3.74,2.28,5.85c-0.03,2.11-0.84,4.2-2.44,5.79l-0.12,0.12c-1.58,1.5-3.6,2.23-5.61,2.2 c-2.01-0.03-4.02-0.82-5.55-2.37C37.5,102.85,20.03,84.9,2.48,67.11c-0.07-0.05-0.13-0.1-0.19-0.16C0.73,65.32-0.03,63.19,0,61.08 c0.03-2.11,0.85-4.21,2.45-5.8l0.27-0.26C20.21,37.47,37.65,19.87,55.17,2.36C56.71,0.82,58.7,0.03,60.71,0 c2.01-0.03,4.03,0.7,5.61,2.21l0.15,0.15c1.57,1.58,2.38,3.66,2.41,5.76c0.03,2.1-0.73,4.22-2.28,5.85L19.38,61.23L66.6,108.91 L66.6,108.91z M118.37,106.91c1.54,1.62,2.29,3.73,2.26,5.83c-0.03,2.11-0.84,4.2-2.44,5.79l-0.12,0.12 c-1.57,1.5-3.6,2.23-5.61,2.21c-2.01-0.03-4.02-0.82-5.55-2.37C89.63,101.2,71.76,84.2,54.24,67.12c-0.07-0.05-0.14-0.11-0.21-0.17 c-1.55-1.63-2.31-3.76-2.28-5.87c0.03-2.11,0.85-4.21,2.45-5.8C71.7,38.33,89.27,21.44,106.8,4.51l0.12-0.13 c1.53-1.54,3.53-2.32,5.54-2.35c2.01-0.03,4.03,0.7,5.61,2.21l0.15,0.15c1.57,1.58,2.38,3.66,2.41,5.76 c0.03,2.1-0.73,4.22-2.28,5.85L71.17,61.23L118.37,106.91L118.37,106.91z"/>
+				</svg>
+			</div>
+
+			<div class="stats-container" id="stats-container">
+				<div class="user-stats-container text-shadow">
+					<span class="streamer-type">Users: </span>
+					<span id="user-count">0</span>
+				</div>
+
+				<div class="link-stats-container text-shadow">
+					<span class="artist-type">Links: </span>
+					<span id="link-count">0</span>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
