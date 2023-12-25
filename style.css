@@ -595,7 +595,67 @@ tr td {
 	justify-content: center;
 	align-self: center;
 	vertical-align: middle;
-	gap: var(--default-margin);
+	gap: var(--double-margin);
+	pointer-events: none !important;
+}
+
+.credits-container {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	flex-direction: row;
+	pointer-events: none;
+}
+
+.credits {
+	font-size: 1rem;
+	margin: var(--default-margin);
+	vertical-align: middle;
+}
+
+.greencomfytea {
+	color: #9acd32;
+	text-decoration: none;
+	pointer-events: all;
+}
+
+.greencomfytea:hover {
+	filter: brightness(150%);
+}
+
+.greencomfytea:active {
+	filter: brightness(200%);
+}
+
+.crippledbyte {
+	color: #25cdd4;
+	text-decoration: none;
+	pointer-events: all;
+}
+
+.crippledbyte:hover {
+	filter: brightness(150%);
+}
+
+.crippledbyte:active {
+	filter: brightness(200%);
+}
+
+.github {
+	height: 20px;
+	margin: var(--default-margin);
+	margin-left: 0rem;
+	vertical-align: middle;
+	pointer-events: all;
+}
+
+.github:hover {
+	filter: brightness(75%);
+}
+
+.github:active {
+	filter: brightness(50%);
 }
 
 .disabled {
