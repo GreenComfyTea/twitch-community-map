@@ -140,7 +140,7 @@ function loadUserDataFromLocalStorage() {
 	}
 }
 
-window.onStreamerChange = async function(selected) {
+window.onStreamerChange = async (selected) => {
 	await dummyAsync();
 	
 	streamer = selected.value;
@@ -149,9 +149,9 @@ window.onStreamerChange = async function(selected) {
 	populateYearDropdowns();
 	populateTimeframeDropdowns();
 	populatePingTypeDropdowns();
-}
+};
 
-window.onYearChange = async function(selected) {
+window.onYearChange = async (selected) => {
 	await dummyAsync();
 
 	year = selected.value;
@@ -159,81 +159,128 @@ window.onYearChange = async function(selected) {
 
 	populateTimeframeDropdowns();
 	populatePingTypeDropdowns();
-}
+};
 
-window.onTimeframeChange = async function(selected) {
+window.onTimeframeChange = async (selected) => {
 	await dummyAsync();
 
 	timeframe = selected.value;
 	saveUserDataToLocalStorage();
 
 	populatePingTypeDropdowns();
-}
+};
 
-window.onPingTypeChange = async function(selected) {
+window.onPingTypeChange = async (selected) => {
 	await dummyAsync();
 
 	pingType = selected.value;
 	saveUserDataToLocalStorage();
-}
+};
 
-window.onMinPingsInput = async function(newValue) {
+window.onMinPingsInput = async (newValue) => {
 	await dummyAsync();
 
 	minPingsLabel.textContent = newValue;
 	minPings = newValue;
 	saveUserDataToLocalStorage();
-}
+};
 
-window.onFilterKeyUp = async function(event) {
+window.onFilterKeyUp = async (event) => {
 	await dummyAsync();
 
 	if(isLoading) return;
 	if (event.key !== "Enter") return;
 	filter();
-}
+};
 
-window.onFilterClick = async function() {
+window.onFilterClick = async () => {
 	await dummyAsync();
 	filter();
-}
+};
 
-window.onSearchKeyUp = async function(event) {
+window.onSearchKeyUp = async (event) => {
 	await dummyAsync();
 
 	if(isLoading) return;
 	if (event.key !== "Enter") return;
 	search();
-}
+};
 
-window.onSearchInput = async function(newValue) {
+window.onSearchInput = async (newValue) => {
 	await dummyAsync();
 
 	searchUsername = newValue;
 	saveUserDataToLocalStorage();
-}
+};
 
-window.onSearchClick = async function() {
+window.onSearchClick = async () => {
 	await dummyAsync();
 
 	search();
-}
+};
 
-window.onLoadClick = async function(event) {
+window.onLoadClick = async (event) => {
 	await dummyAsync();
 
 	disableUI();
 	loadNewMap();
-}
+};
 
-window.onPerformanceModeChange = async function(checkbox) {
+window.onPerformanceModeChange = async (checkbox) => {
 	await dummyAsync();
 
 	performanceMode = checkbox.checked === true ? true : false;
 	saveUserDataToLocalStorage();
 
 	changePerformanceMode(performanceMode);
-}
+};
+
+var isInfoCollapsed = false;
+var isLeaderboardCollapsed = false;
+
+window.onInfoCollapseClick = async (event) => {
+	await dummyAsync();
+
+	const infoContainer = document.getElementById("info-container");
+	const infoCollapseArrow = document.getElementById("info-collapse-arrow");
+
+	if(isInfoCollapsed) {
+		infoContainer.classList.add("expand-to-right-animation");
+		infoContainer.classList.remove("collapse-to-left-animation");
+
+		infoCollapseArrow.classList.remove("flip-arrow");
+	}
+	else {
+		infoContainer.classList.add("collapse-to-left-animation");
+		infoContainer.classList.remove("expand-to-right-animation");
+
+		infoCollapseArrow.classList.add("flip-arrow");
+	}
+
+	isInfoCollapsed = !isInfoCollapsed;
+};
+
+window.onLeaderboardCollapseClick = async (event) => {
+	await dummyAsync();
+
+	const leaderboardContainer = document.getElementById("leaderboard-container");
+	const leaderboardCollapseArrow = document.getElementById("leaderboard-collapse-arrow");
+
+	if(isLeaderboardCollapsed) {
+		leaderboardContainer.classList.add("expand-to-left-animation");
+		leaderboardContainer.classList.remove("collapse-to-right-animation");
+
+		leaderboardCollapseArrow.classList.add("flip-arrow");
+	}
+	else {
+		leaderboardContainer.classList.add("collapse-to-right-animation");
+		leaderboardContainer.classList.remove("expand-to-left-animation");
+
+		leaderboardCollapseArrow.classList.remove("flip-arrow");
+	}
+
+	isLeaderboardCollapsed = !isLeaderboardCollapsed;
+};
 
 function search() {
 	if(searchUsername === "" || searchUsername === null || searchUsername === undefined) return;
@@ -412,7 +459,8 @@ onload = async (event) => {
 			{ data: "pingsReceived" },
 			{ data: "pingsSent" }
 		],
-		createdRow: (row, node, index) => {
+		createdRow: async (row, node, index) => {
+			await dummyAsync();
 
 			row.id = node.name;
 		
@@ -420,11 +468,16 @@ onload = async (event) => {
 				case "Streamer":
 					row.classList.add("streamer-type");
 					break;
+				case "Staff":
+					row.classList.add("staff-type");
 				case "Moderator":
 					row.classList.add("moderator-type");
 					break;
 				case "VIP":
 					row.classList.add("vip-type");
+					break;
+				case "Artist":
+					row.classList.add("artist-type");
 					break;
 				case "Partner":
 					row.classList.add("partner-type");
@@ -432,6 +485,7 @@ onload = async (event) => {
 				case "Subscriber":
 					row.classList.add("subscriber-type");
 					break;
+				case "Viewer":
 				default:
 					row.classList.add("viewer-type");
 					
@@ -453,7 +507,9 @@ onload = async (event) => {
 		}
 	});
 
-	leaderboardTable.on('click', 'tbody tr', function() {
+	leaderboardTable.on('click', 'tbody tr', async () => {
+		await dummyAsync();
+
 		const node = leaderboardTable.row(this).data();
 		if(!node) return;
 
