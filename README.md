@@ -24,5 +24,7 @@ Gephi Simulation:
 
 ## TODO
 
-1) Make Hide buttons for Info and Leaderboard
-2) Style for Tooltip
+1) Fix Staff Links
+2) Fix Bot Nodes and Links
+3) Style for Tooltip
+4) Fix Stats pointer-events = none not working
