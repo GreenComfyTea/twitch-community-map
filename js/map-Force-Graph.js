@@ -167,8 +167,8 @@ function preprocessData(data, pingType) {
 
 		link.width = link.pingCount;
 	
-		link.sourceNode = data.nodes.find((node) => node.name === link.source);
-		link.targetNode = data.nodes.find((node) => node.name === link.target);
+		link.sourceNode = data.nodes.find((node) => node.name.localeCompare(link.source) === 0);
+		link.targetNode = data.nodes.find((node) => node.name.localeCompare(link.target) === 0);
 
 		if (link.sourceNode.diameter < link.width) link.width = link.sourceNode.diameter;
 		if (link.targetNode.diameter < link.width) link.width = link.targetNode.diameter;
@@ -254,6 +254,7 @@ function createGraph(data) {
 	map(mapElement)
 		.width(window.innerWidth)
 		.height(window.innerHeight)
+
 		.nodeRelSize(nodeRelSize)
 		.nodeId("name")
 		.nodeVal("squaredRadius")
@@ -412,7 +413,7 @@ function filterNodes(minPings) {
 
 function searchNode(userName) {
 	const padding = 0.25 * Math.min(window.innerWidth, window.innerHeight);
-	map.zoomToFit(1000, padding, (node) => node.name === userName);
+	map.zoomToFit(1000, padding, (node) => node.name.localeCompare(userName) === 0);
 }
 
 function resizeCanvas() {
