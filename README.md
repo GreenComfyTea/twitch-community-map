@@ -28,3 +28,4 @@ Gephi Simulation:
 2) Fix Bot Nodes and Links
 3) Style for Tooltip
 4) Fix Stats pointer-events = none not working
+5) Fix Some Node Colors being too bright to see the label
