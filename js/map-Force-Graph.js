@@ -1,4 +1,4 @@
-import Stats from "https://cdnjs.cloudflare.com/ajax/libs/stats.js/r17/Stats.js";
+//import Stats from "https://cdnjs.cloudflare.com/ajax/libs/stats.js/r17/Stats.js";
 
 // const DEBUG = false;
 
