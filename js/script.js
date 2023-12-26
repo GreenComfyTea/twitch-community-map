@@ -18,9 +18,12 @@ const timeframeNames = {
 }
 
 const pingTypeNames = {
-	"pingsReceived": "Pings Received",
-	"pingsSent": "Pings Sent"
+	"pingsReceived": "🡇 Pings Received",
+	"pingsSent": "🡅 Pings Sent"
 }
+
+{/* <th><span class="green-text">🡇</span> <span class="text-shadow">Received</span></th>
+<th><span class="blue-text">🡅</span> <span class="text-shadow">Sent</span></th> */}
 
 const dummyAsync = async () => {};
 
