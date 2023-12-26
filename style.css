@@ -128,9 +128,10 @@ tr td {
 	background-color: var(--new-background-color);
 }
 
-.graph-tooltip {
+.force-graph-container .graph-tooltip {
 	font: var(--font-family);
-	font-size: 500px;
+	text-align: center;
+	/* font-size: 500px; */
 }
 
 .ui-container {

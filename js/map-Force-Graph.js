@@ -134,7 +134,9 @@ function preprocessData(data, pingType) {
 		node.pingCount = node[pingType];
 
 		node.displayName = node.displayName || node.name;
-		node.tooltipText = `${node.displayName} (${node.userType}) - ${node.pingCount}`;
+		node.tooltipText = `<span class=" text-shadow">${node.displayName}<br>
+			<span class="${node.userType.toLowerCase()}-type">${node.userType}</span><br>
+			<span class="green-text">🡇</span> ${node.pingsReceived} <span class="blue-text">🡅</span> ${node.pingsSent}</span>`;
 
 		node.color = colors[node.userType];
 
