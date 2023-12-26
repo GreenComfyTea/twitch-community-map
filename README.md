@@ -25,4 +25,3 @@ Gephi Simulation:
 ## TODO
 
 1) Style for Tooltip
-2) Fix Some Node Colors being too bright to see the label
