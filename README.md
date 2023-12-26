@@ -24,7 +24,6 @@ Gephi Simulation:
 
 ## TODO
 
-1) Fix Staff Links
-2) Fix Bot Nodes and Links
-3) Style for Tooltip
-5) Fix Some Node Colors being too bright to see the label
+1) Fix Bot Nodes and Links
+2) Style for Tooltip
+3) Fix Some Node Colors being too bright to see the label
