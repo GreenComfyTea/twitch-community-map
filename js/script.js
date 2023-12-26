@@ -169,7 +169,6 @@ function loadUserDataFromLocalStorage() {
 		performanceModeCheckbox.checked = performanceMode;
 	}
 
-	console.log(storedIsInfoCollapsed);
 	if(storedIsInfoCollapsed) {
 		isInfoCollapsed = JSON.parse(storedIsInfoCollapsed);
 		if(isInfoCollapsed) updateInfoCollapse();
