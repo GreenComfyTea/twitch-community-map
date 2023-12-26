@@ -592,6 +592,11 @@ tr td {
 	pointer-events: none;
 }
 
+.user-stats-container {
+	min-width: fit-content;
+	width: 10rem;
+}
+
 .credits-container {
 	position: absolute;
 	right: 0;
