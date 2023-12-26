@@ -534,6 +534,7 @@ onload = async (event) => {
 					break;
 				case "Staff":
 					row.classList.add("staff-type");
+					break;
 				case "Moderator":
 					row.classList.add("moderator-type");
 					break;

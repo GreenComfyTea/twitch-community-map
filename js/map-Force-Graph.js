@@ -4,22 +4,22 @@ import Stats from "https://cdnjs.cloudflare.com/ajax/libs/stats.js/r17/Stats.js"
 
 const colors = {
 	Streamer: "#ff5e7e",
-	Staff: "#88FF00",
+	Staff: "#e52e2e",
 	Moderator: "#00ad03",
 	VIP: "#e005b9",
-	Artist: "#1aafff",
-	Partner: "#ffd466",
+	Artist: "#0ca2f2",
+	Partner: "#d9ae41",
 	Subscriber: "#a951fb",
 	Viewer: "#009978",
 };
 
 const outlineColors = {
 	Streamer: "#7f2f3f",
-	Staff: "#447f00",
+	Staff: "#721717",
 	Moderator: "#005601",
 	VIP: "#70025c",
 	Artist: "#0d577f",
-	Partner: "#7f6a33",
+	Partner: "#6c5720",
 	Subscriber: "#54287d",
 	Viewer: "#004c3c",
 };
@@ -41,7 +41,7 @@ var onMapLoadedCallback = (data) => {};
 
 const outlineProportion = 0.15;
 const fontSizeProportion = 0.275;
-const fontOutlineProportion = 0.175;
+const fontOutlineProportion = 0.15;
 const sqrtPI = Math.sqrt(Math.PI);
 
 const nodeRelSize = 4;
@@ -192,7 +192,8 @@ function filterData(dataCopy, minPings) {
 	const newNodes = [];
 
 	dataCopy.nodes.forEach((node) => {
-		if(node.pingCount >= minPings) {
+		if(node.pingCount >= minPings
+		|| node.userType === "Streamer") {
 			newNodes.push(node);
 			return;
 		}
@@ -302,9 +303,11 @@ function createGraph(data) {
 		    context.textAlign = "center";
 		    context.textBaseline = "middle";
 	
-			context.strokeStyle = node.color;
-			context.lineWidth = node.fontOutlineWidth;
-			context.strokeText(node.displayName, node.x, node.y);
+			if(!performanceMode) {
+				context.strokeStyle = node.color;
+				context.lineWidth = node.fontOutlineWidth;
+				context.strokeText(node.displayName, node.x, node.y);
+			}
 	
 			context.fillStyle = "white"; 
 		    context.fillText(node.displayName, node.x, node.y);
