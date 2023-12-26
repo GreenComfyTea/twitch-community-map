@@ -24,4 +24,4 @@ Gephi Simulation:
 
 ## TODO
 
-1) Style for Tooltip
+1) Highlight Nodes and Links?
