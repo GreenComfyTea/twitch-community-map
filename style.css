@@ -362,10 +362,6 @@ tr td {
 	background-color: var(--subscriber-color);
 }
 
-.bot-circle {
-	background-color: var(--bot-color);
-}
-
 .viewer-circle {
 	background-color: var(--viewer-color);
 }
@@ -423,10 +419,6 @@ tr td {
 
 .subscriber-type {
 	color: var(--subscriber-color);
-}
-
-.bot-type {
-	color: var(--bot-color);
 }
 
 .viewer-type {

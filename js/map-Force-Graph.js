@@ -10,7 +10,6 @@ const colors = {
 	Artist: "#1aafff",
 	Partner: "#ffd466",
 	Subscriber: "#a951fb",
-	Bot: "#000000",
 	Viewer: "#009978",
 };
 
@@ -22,7 +21,6 @@ const outlineColors = {
 	Artist: "#0d577f",
 	Partner: "#7f6a33",
 	Subscriber: "#54287d",
-	Bot: "#ffffff",
 	Viewer: "#004c3c",
 };
 
@@ -34,7 +32,6 @@ const lastUsersFound = {
 	Artist: "",
 	Partner: "",
 	Subscriber: "",
-	Bot: "",
 	Viewer: "",
 }
 
