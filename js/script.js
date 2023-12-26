@@ -103,6 +103,18 @@ function saveUserDataToLocalStorage() {
 	if(performanceMode === true || performanceMode === false) {
 		localStorage.performanceMode = performanceMode;
 	}
+
+	if(isInfoCollapsed === true || isInfoCollapsed === false) {
+		localStorage.isInfoCollapsed = isInfoCollapsed;
+	}
+
+	if(isLeaderboardCollapsed === true || isLeaderboardCollapsed === false) {
+		localStorage.isLeaderboardCollapsed = isLeaderboardCollapsed;
+	}
+
+	if(isStatsCollapsed === true || isStatsCollapsed === false) {
+		localStorage.isStatsCollapsed = isStatsCollapsed;
+	}
 }
 
 function loadUserDataFromLocalStorage() {
@@ -117,6 +129,9 @@ function loadUserDataFromLocalStorage() {
 	const storedMinPings = localStorage.minPings;
 	const storedSearchUsername = localStorage.searchUsername;
 	const storedPerformanceMode = localStorage.performanceMode;
+	const storedIsInfoCollapsed = localStorage.isInfoCollapsed;
+	const storedIsLeaderboardCollapsed = localStorage.isLeaderboardCollapsed;
+	const storedIsStatsCollapsed = localStorage.isStatsCollapsed;
 
 	if(storedStreamer) {
 		streamer = storedStreamer;
@@ -152,6 +167,22 @@ function loadUserDataFromLocalStorage() {
 	if(storedPerformanceMode) {
 		performanceMode = JSON.parse(storedPerformanceMode);
 		performanceModeCheckbox.checked = performanceMode;
+	}
+
+	console.log(storedIsInfoCollapsed);
+	if(storedIsInfoCollapsed) {
+		isInfoCollapsed = JSON.parse(storedIsInfoCollapsed);
+		if(isInfoCollapsed) updateInfoCollapse();
+	}
+
+	if(storedIsLeaderboardCollapsed) {
+		isLeaderboardCollapsed = JSON.parse(storedIsLeaderboardCollapsed);
+		if(isLeaderboardCollapsed) updateLeaderboardCollapse();
+	}
+
+	if(storedIsStatsCollapsed) {
+		isStatsCollapsed = JSON.parse(storedIsStatsCollapsed);
+		if(isStatsCollapsed) updateStatsCollapse();
 	}
 }
 
@@ -254,6 +285,7 @@ window.onInfoCollapseClick = async (event) => {
 	await dummyAsync();
 
 	isInfoCollapsed = !isInfoCollapsed;
+	saveUserDataToLocalStorage();
 	updateInfoCollapse();
 };
 
@@ -261,6 +293,7 @@ window.onLeaderboardCollapseClick = async (event) => {
 	await dummyAsync();
 
 	isLeaderboardCollapsed = !isLeaderboardCollapsed;
+	saveUserDataToLocalStorage();
 	updateLeaderboardCollapse();
 };
 
@@ -268,6 +301,7 @@ window.onStatsCollapseClick = async (event) => {
 	await dummyAsync();
 
 	isStatsCollapsed = !isStatsCollapsed;
+	saveUserDataToLocalStorage();
 	updateStatsCollapse();
 };
 
