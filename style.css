@@ -612,6 +612,21 @@ tr td {
 	vertical-align: middle;
 }
 
+.heart-shadow {
+	--heart-shadow-width: 0.035rem;
+	--negative-heart-shadow-width: -0.035rem;
+
+	text-shadow:
+		var(--negative-heart-shadow-width)	var(--negative-heart-shadow-width)	0 var(--new-background-color),
+		var(--negative-heart-shadow-width)	0									0 var(--new-background-color),
+		var(--negative-heart-shadow-width)	var(--heart-shadow-width)			0 var(--new-background-color),
+		0									var(--negative-heart-shadow-width)	0 var(--new-background-color),
+		0			 						var(--heart-shadow-width)			0 var(--new-background-color),
+		var(--heart-shadow-width)			var(--negative-heart-shadow-width)	0 var(--new-background-color),
+		var(--heart-shadow-width)			0									0 var(--new-background-color),
+		var(--heart-shadow-width)			var(--heart-shadow-width)			0 var(--new-background-color);	
+}
+
 .greencomfytea {
 	color: #9acd32;
 	text-decoration: none;
