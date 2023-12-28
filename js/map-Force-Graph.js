@@ -3,26 +3,39 @@
 // const DEBUG = false;
 
 const colors = {
-	Streamer: "#ff5e7e",
-	Staff: "#e52e2e",
-	Moderator: "#00ad03",
-	VIP: "#e005b9",
-	Artist: "#0ca2f2",
-	Partner: "#d9ae41",
-	Subscriber: "#a951fb",
-	Viewer: "#009978",
-};
-
-const outlineColors = {
-	Streamer: "#7f2f3f",
-	Staff: "#721717",
-	Moderator: "#005601",
-	VIP: "#70025c",
-	Artist: "#0d577f",
-	Partner: "#6c5720",
-	Subscriber: "#54287d",
-	Viewer: "#004c3c",
-};
+	Streamer: {
+		color: "#ff5e7e",
+		darkerColor: "#7f2f3f",
+	},
+	Staff: {
+		color: "#e52e2e",
+		darkerColor: "#721717",
+	},
+	Moderator: {
+		color: "#00ad03",
+		darkerColor: "#005601",
+	},
+	VIP: {
+		color: "#e005b9",
+		darkerColor: "#70025c",
+	},
+	Artist: {
+		color: "#0ca2f2",
+		darkerColor: "#0d577f",
+	},
+	Partner: {
+		color: "#d9ae41",
+		darkerColor: "#6c5720",
+	},
+	Subscriber: {
+		color: "#a951fb",
+		darkerColor: "#54287d",
+	},
+	Viewer: {
+		color: "#009978",
+		darkerColor: "#004c3c",
+	},
+}
 
 const lastUsersFound = {
 	Streamer: "",
@@ -39,9 +52,12 @@ const dummyAsync = async () => {};
 
 var onMapLoadedCallback = (data) => {};
 
-const outlineProportion = 0.15;
-const fontSizeProportion = 0.275;
-const fontOutlineProportion = 0.15;
+const nonHighlightedRatio = 0.2;
+const linkAlpha = 0.5;
+
+const outlineRatio = 0.15;
+const fontSizeRatio = 0.275;
+const fontOutlineRatio = 0.15;
 const sqrtPI = Math.sqrt(Math.PI);
 
 const nodeRelSize = 4;
@@ -55,6 +71,9 @@ var performanceMode = false;
 
 var data;
 var map;
+
+var highlightedNodes = [];
+var highlightedLinks = [];
 
 const limit = 1.3;
 var bottomLimit = limit * window.innerHeight;
@@ -81,14 +100,83 @@ var cooldownTicks = Infinity;
 // 	console.log(totalFT.dom);
 // }
 
+function populateColors() {
+	Object.values(colors).forEach((userTypeColors) => {
+		const normalHighlighted = {
+			nodeColor:			userTypeColors.color,
+			nodeOutlineColor:	userTypeColors.darkerColor,
+			textColor:			"#ffffff",
+			textOutlineColor:	userTypeColors.color
+		};
+	
+		const normalHighlightedChroma = {
+			nodeColorChroma:			chroma(normalHighlighted.nodeColor),
+			nodeOutlineColorChroma:		chroma(normalHighlighted.nodeOutlineColor),
+			textColorChroma:			chroma(normalHighlighted.textColor),
+			textOutlineColorChroma:		chroma(normalHighlighted.textOutlineColor)
+		};
+	
+		const normalNonHighlighted = {
+			nodeColor:			normalHighlightedChroma.nodeColorChroma.set("hsl.l", nonHighlightedRatio * normalHighlightedChroma.nodeColorChroma.get("hsl.l")).hex(),
+			nodeOutlineColor:	normalHighlightedChroma.nodeOutlineColorChroma.set("hsl.l", nonHighlightedRatio * normalHighlightedChroma.nodeOutlineColorChroma.get("hsl.l")).hex(),
+			textColor:			normalHighlightedChroma.textColorChroma.set("hsl.l", nonHighlightedRatio * normalHighlightedChroma.textColorChroma.get("hsl.l")).hex(),
+			textOutlineColor:	normalHighlightedChroma.textOutlineColorChroma.set("hsl.l", nonHighlightedRatio * normalHighlightedChroma.textOutlineColorChroma.get("hsl.l")).hex()
+		};
+	
+		const performanceHighlighted = normalHighlighted;
+		// const performanceHighlighted = {
+		// 	nodeColor: userTypeColors.color,
+		// 	nodeOutlineColor: userTypeColors.darkerColor,
+		// 	textColor:  "#ffffff",
+		// 	textOutlineColor: userTypeColors.color
+		// };
+	
+		const performanceHighlightedChroma = {
+			nodeColorChroma:			chroma(performanceHighlighted.nodeColor),
+			nodeOutlineColorChroma:		chroma(performanceHighlighted.nodeOutlineColor),
+			textColorChroma:			chroma(performanceHighlighted.textColor),
+			textOutlineColorChroma:		chroma(performanceHighlighted.textOutlineColor)
+		};
+	
+		const performanceNonHighlighted = {
+			nodeColor:			performanceHighlightedChroma.nodeColorChroma.set("hsl.l", nonHighlightedRatio * performanceHighlightedChroma.nodeColorChroma.get("hsl.l")).hex(),
+			nodeOutlineColor:	performanceHighlightedChroma.nodeOutlineColorChroma.set("hsl.l", nonHighlightedRatio * performanceHighlightedChroma.nodeOutlineColorChroma.get("hsl.l")).hex(),
+			textColor:			performanceHighlightedChroma.textColorChroma.set("hsl.l", nonHighlightedRatio * performanceHighlightedChroma.textColorChroma.get("hsl.l")).hex(),
+			textOutlineColor:	performanceHighlightedChroma.textOutlineColorChroma.set("hsl.l", nonHighlightedRatio * performanceHighlightedChroma.textOutlineColorChroma.get("hsl.l")).hex()
+		};
+	
+		userTypeColors.nodeColors = {};
+	
+		userTypeColors.nodeColors.normalMode = {};
+		userTypeColors.nodeColors.performanceMode = {};
+	
+		userTypeColors.nodeColors.normalMode.highlighted = normalHighlighted;
+		userTypeColors.nodeColors.normalMode.nonHighlighted = normalNonHighlighted;
+	
+		userTypeColors.nodeColors.performanceMode.highlighted = performanceHighlighted;
+		userTypeColors.nodeColors.performanceMode.nonHighlighted = performanceNonHighlighted;
+	
+		userTypeColors.linkColors = {};
+	
+		userTypeColors.linkColors.normalMode = {};
+		userTypeColors.linkColors.performanceMode = {};
+	
+		userTypeColors.linkColors.normalMode.highlighted = chroma(userTypeColors.color).alpha(linkAlpha).hex();
+		userTypeColors.linkColors.normalMode.nonHighlighted = chroma(userTypeColors.color).alpha( nonHighlightedRatio * linkAlpha).hex();
+	
+		userTypeColors.linkColors.performanceMode.highlighted = userTypeColors.darkerColor;
+		const performanceHighlightedLinkChroma = chroma(userTypeColors.linkColors.performanceMode.highlighted);
+
+		userTypeColors.linkColors.performanceMode.nonHighlighted = performanceHighlightedLinkChroma.set("hsl.l", nonHighlightedRatio * performanceHighlightedLinkChroma.get("hsl.l")).hex();
+	});
+}
+
 function loadMap(streamer, year, timeframe, pingType, minPings, newPerformanceMode) {
 	performanceMode = newPerformanceMode;
 
 	let fileName = `${streamer}_${year}`;
 	if (timeframe !== "year") fileName = `${fileName}_${timeframe}`;
 	fileName = `${fileName}_${pingType}`;
-
-	//console.log(`./data/${streamer}/${year}/${timeframe}/${fileName}.json`);
 
 	fetch(`./data/${streamer}/${year}/${timeframe}/${fileName}.json`)
     .then((response) => response.json())
@@ -97,6 +185,7 @@ function loadMap(streamer, year, timeframe, pingType, minPings, newPerformanceMo
 		preprocessData(data, pingType);
 		const dataCopy = structuredClone(data);
 		filterData(dataCopy, minPings);
+		postprocessData(dataCopy);
 		createGraph(dataCopy);
 	});
 }
@@ -138,8 +227,6 @@ function preprocessData(data, pingType) {
 			<span class="${node.userType.toLowerCase()}-type">${node.userType}</span><br>
 			<span class="green-text">🡇</span> ${node.pingsReceived} <span class="blue-text">🡅</span> ${node.pingsSent}</span>`;
 
-		node.color = colors[node.userType];
-
 		// S = pi * r^2
 		node.area = 12 * node.pingCount;
 
@@ -148,15 +235,20 @@ function preprocessData(data, pingType) {
 		node.squaredRadius = node.radius * node.radius;
 		node.diameter = 2 * node.radius;
 	
-		node.outlineColor = outlineColors[node.userType];
-		node.outlineWidth = Math.max(2, outlineProportion * node.radius * nodeRelSize);
+		node.outlineWidth = Math.max(2, outlineRatio * node.radius * nodeRelSize);
 	
-		node.fontSize = Math.max(4, fontSizeProportion * node.radius * nodeRelSize);
-		node.fontOutlineWidth = Math.max(1, fontOutlineProportion * node.radius * nodeRelSize);
+		node.fontSize = Math.max(4, fontSizeRatio * node.radius * nodeRelSize);
+		node.fontOutlineWidth = Math.max(1, fontOutlineRatio * node.radius * nodeRelSize);
+		node.font = `600 ${node.fontSize}px Montserrat`;
 
 		node.collisionDistance = 5 + 95 * Math.random() + node.outlineWidth + 2 * node.diameter;
 		
 		node.visibilityLimit = 3 * (node.radius + node.outlineWidth);
+
+		node.colors = colors[node.userType].nodeColors;
+		switchNodeColors(node);
+
+		node.connectedLinks = [];
 	});
 
 	if(isGephiGenerated) {
@@ -179,15 +271,64 @@ function preprocessData(data, pingType) {
 		}
 
 		link.width = link.pingCount;
+		link.forceDistance = 1000 / link.pingCount;
 	
 		link.sourceNode = data.nodes.find((node) => node.name.localeCompare(link.source) === 0);
 		link.targetNode = data.nodes.find((node) => node.name.localeCompare(link.target) === 0);
 
 		if (link.sourceNode.diameter < link.width) link.width = link.sourceNode.diameter;
 		if (link.targetNode.diameter < link.width) link.width = link.targetNode.diameter;
+
+		link.colors = colors[link.userType].linkColors;
+		switchLinkColor(link);
 	});
 
 	delete data.attributes;
+}
+
+function postprocessData(dataCopy) {
+	dataCopy.links.forEach((link) => {
+		const sourceNode = dataCopy.nodes.find((node) => node.name.localeCompare(link.source) === 0);
+		const targetNode = dataCopy.nodes.find((node) => node.name.localeCompare(link.target) === 0);
+
+		sourceNode.connectedLinks.push(link);
+		targetNode.connectedLinks.push(link);
+	});
+}
+
+function switchNodeColors(node) {
+	const isHighlighted = node.isHighlighted || highlightedNodes.length === 0;
+
+	//console.log("isHighlighted", isHighlighted);
+
+	const newColors = performanceMode
+		? isHighlighted
+			? node.colors.performanceMode.highlighted
+			: node.colors.performanceMode.nonHighlighted
+		: isHighlighted
+			? node.colors.normalMode.highlighted
+			: node.colors.normalMode.nonHighlighted;
+	
+	node.nodeColor = newColors.nodeColor;
+	node.nodeOutlineColor = newColors.nodeOutlineColor;
+	node.textColor = newColors.textColor;
+	node.textOutlineColor = newColors.textOutlineColor;
+
+	//console.log("after: " + node.nodeColor);
+}
+
+function switchLinkColor(link) {
+	const isHighlighted = link.isHighlighted || highlightedNodes.length === 0;
+
+	link.color = performanceMode
+		?  isHighlighted
+			? link.colors.performanceMode.highlighted
+			: link.colors.performanceMode.nonHighlighted
+		: isHighlighted
+			? link.colors.normalMode.highlighted
+			: link.colors.normalMode.nonHighlighted;
+
+	//console.log("after: " + link.color);
 }
 
 function filterData(dataCopy, minPings) {
@@ -264,6 +405,8 @@ function createGraph(data) {
 
 	if (map !== undefined) map._destructor();
 
+	const linkCurvature = performanceMode ? 0 : 0.25;
+
 	map = ForceGraph();
 	map(mapElement)
 		.width(window.innerWidth)
@@ -273,7 +416,7 @@ function createGraph(data) {
 		.nodeId("name")
 		.nodeVal("squaredRadius")
 		.nodeLabel("tooltipText")
-		.nodeColor("color")
+		.nodeColor("nodeColor")
 
 		.nodeVisibility((node) => {
 			const screenCoordinates = map.graph2ScreenCoords(node.x, node.y);
@@ -294,74 +437,30 @@ function createGraph(data) {
 			// Outline
 			context.lineJoin = "round";
 			context.lineWidth = node.outlineWidth;
-			context.strokeStyle = node.outlineColor;
+			context.strokeStyle = node.nodeOutlineColor;
 			context.stroke();
 	
 			if (node.fontSize * globalScale < 5) return;
 
 			// Label
 
-		    context.font = `600 ${node.fontSize}px Montserrat`;
+		    context.font = node.font;
 		    context.textAlign = "center";
 		    context.textBaseline = "middle";
 	
 			if(!performanceMode) {
-				context.strokeStyle = node.color;
+				context.strokeStyle = node.textOutlineColor;
 				context.lineWidth = node.fontOutlineWidth;
 				context.strokeText(node.displayName, node.x, node.y);
 			}
 	
-			context.fillStyle = "white"; 
+			context.fillStyle = node.textColor; 
 		    context.fillText(node.displayName, node.x, node.y);
 		})
 
 		.linkWidth("width")
-		.linkColor((link) => performanceMode ? outlineColors[link.userType] : colors[link.userType] + "80")
-
-		.linkCurvature((link) => performanceMode ? 0 : 0.25)
-
-		//#region 
-		// .linkVisibility((link) => {
-		// 	return true;
-		// 	//if(!performanceMode) return true;
-
-		// 	const sourceNode = link.source;
-		// 	const targetNode = link.target;
-
-		// 	const sourceScreenCoordinates = map.graph2ScreenCoords(sourceNode.x, sourceNode.y);
-		// 	const targetScreenCoordinates = map.graph2ScreenCoords(targetNode.x, targetNode.y);
-
-
-		// 	const sourceVisibilityLimit =  lastGlobalScale * sourceNode.visibilityLimit;
-		// 	const targetVisibilityLimit =  lastGlobalScale * targetNode.visibilityLimit;
-
-		// 	if(sourceScreenCoordinates.x > sourceVisibilityLimit + window.innerWidth
-		// 	&& targetScreenCoordinates.x > targetVisibilityLimit + window.innerWidth)
-		// 	{
-		// 		return false;
-		// 	}
-
-		// 	if(sourceScreenCoordinates.y > sourceVisibilityLimit + window.innerHeight
-		// 	&& targetScreenCoordinates.y > targetVisibilityLimit + window.innerHeight)
-		// 	{
-		// 		return false;
-		// 	}
-	
-		// 	if(sourceScreenCoordinates.x < -sourceVisibilityLimit
-		// 	&& targetScreenCoordinates.x < -targetVisibilityLimit)
-		// 	{
-		// 		return false;
-		// 	}
-
-		// 	if(sourceScreenCoordinates.y < -sourceVisibilityLimit
-		// 	&& targetScreenCoordinates.y < -targetVisibilityLimit)
-		// 	{
-		// 		return false;
-		// 	}
-
-		// 	return true;
-		// })
-		//#endregion
+		.linkColor("color")
+		.linkCurvature(linkCurvature)
 
 		.linkCanvasObjectMode(() => "after")
 		.linkCanvasObject((link, context, globalScale) => {
@@ -379,7 +478,7 @@ function createGraph(data) {
 		.d3Force("charge", d3.forceManyBody().strength(-30).theta(1.2))
 		.d3Force("center", d3.forceCenter().strength(0.025))
 		.d3Force("collide", d3.forceCollide((node) => node.collisionDistance).strength(0.5).iterations(1)) 
-		.d3Force("link", d3.forceLink(map.graphData().links).id((link) => link.name).distance((link) => 1000 / link.pingCount).strength(0.5))
+		.d3Force("link", d3.forceLink(map.graphData().links).id((link) => link.name).distance((link) => link.forceDistance).strength(0.5))
 		
 		.onRenderFramePre((context, globalScale) => {
 			lastGlobalScale = globalScale;
@@ -411,6 +510,62 @@ function createGraph(data) {
 		// 		totalFT.end();
 		// 	}
 		// })
+
+		.onNodeHover(((node) => {
+			highlightedNodes.forEach((node) => {
+				node.isHighlighted = false;
+			});
+
+			highlightedLinks.forEach((link) => {
+				link.isHighlighted = false;
+			});
+
+			highlightedNodes = [];
+			highlightedLinks = [];
+
+			map.autoPauseRedraw(false);
+
+			const graphData = map.graphData();
+			const nodes = graphData.nodes;
+			const links = graphData.links;
+
+			if(!node) {
+				nodes.forEach((node) => {
+					switchNodeColors(node);
+				});
+	
+				links.forEach((link) => {
+					switchLinkColor(link);
+				});
+
+				return;
+			}
+
+			highlightedNodes.push(node);
+			node.isHighlighted = true;
+			
+			node.connectedLinks.forEach((link) => {
+				highlightedLinks.push(link);
+				link.isHighlighted = true;
+
+				const sourceNode = link.sourceNode;
+				const targetNode = link.targetNode;
+				
+				highlightedNodes.push(sourceNode);
+				highlightedNodes.push(targetNode);
+
+				sourceNode.isHighlighted = true;
+				targetNode.isHighlighted = true;
+			});
+
+			nodes.forEach((node) => {
+				switchNodeColors(node);
+			});
+
+			links.forEach((link) => {
+				switchLinkColor(link);
+			});
+		}))
 		.onZoom((transform) => map.linkWidth((link) => link.width * transform.k))
 		// .onNodeDragEnd((node) => {
 		//     node.fx = node.x;
@@ -494,11 +649,18 @@ function resizeCanvas() {
 
 function changePerformanceMode(newPerformanceMode) {
 	performanceMode = newPerformanceMode;
+
+	map.graphData().nodes.forEach((node) => {
+		switchNodeColors(node);
+	});
+
 	map.autoPauseRedraw(false);
 }
 
 function onMapLoaded(callback) {
 	onMapLoadedCallback = callback;
 }
+
+populateColors();
 
 export {loadMap, data as mapData, resizeCanvas, filterNodes, searchNode, searchNextNode, changePerformanceMode, onMapLoaded};
