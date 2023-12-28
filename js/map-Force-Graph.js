@@ -297,15 +297,11 @@ function postprocessData(dataCopy) {
 }
 
 function switchNodeColors(node) {
-	const isHighlighted = node.isHighlighted || highlightedNodes.length === 0;
-
-	//console.log("isHighlighted", isHighlighted);
-
 	const newColors = performanceMode
-		? isHighlighted
+		? node.isHighlighted || highlightedNodes.length === 0
 			? node.colors.performanceMode.highlighted
 			: node.colors.performanceMode.nonHighlighted
-		: isHighlighted
+		: node.isHighlighted || highlightedNodes.length === 0
 			? node.colors.normalMode.highlighted
 			: node.colors.normalMode.nonHighlighted;
 	
@@ -313,22 +309,16 @@ function switchNodeColors(node) {
 	node.nodeOutlineColor = newColors.nodeOutlineColor;
 	node.textColor = newColors.textColor;
 	node.textOutlineColor = newColors.textOutlineColor;
-
-	//console.log("after: " + node.nodeColor);
 }
 
 function switchLinkColor(link) {
-	const isHighlighted = link.isHighlighted || highlightedNodes.length === 0;
-
 	link.color = performanceMode
-		?  isHighlighted
+		? link.isHighlighted || highlightedNodes.length === 0
 			? link.colors.performanceMode.highlighted
 			: link.colors.performanceMode.nonHighlighted
-		: isHighlighted
+		: link.isHighlighted || highlightedNodes.length === 0
 			? link.colors.normalMode.highlighted
 			: link.colors.normalMode.nonHighlighted;
-
-	//console.log("after: " + link.color);
 }
 
 function filterData(dataCopy, minPings) {
@@ -416,7 +406,10 @@ function createGraph(data) {
 		.nodeId("name")
 		.nodeVal("squaredRadius")
 		.nodeLabel("tooltipText")
-		.nodeColor("nodeColor")
+		.nodeColor((node) => {
+			switchNodeColors(node);
+			return node.nodeColor;
+		})
 
 		.nodeVisibility((node) => {
 			const screenCoordinates = map.graph2ScreenCoords(node.x, node.y);
@@ -454,12 +447,16 @@ function createGraph(data) {
 				context.strokeText(node.displayName, node.x, node.y);
 			}
 	
-			context.fillStyle = node.textColor; 
+			context.fillStyle = node.textColor;
+
 		    context.fillText(node.displayName, node.x, node.y);
 		})
 
 		.linkWidth("width")
-		.linkColor("color")
+		.linkColor((link) => {
+			switchLinkColor(link);
+			return link.color;
+		})
 		.linkCurvature(linkCurvature)
 
 		.linkCanvasObjectMode(() => "after")
@@ -530,13 +527,13 @@ function createGraph(data) {
 			const links = graphData.links;
 
 			if(!node) {
-				nodes.forEach((node) => {
-					switchNodeColors(node);
-				});
+				// nodes.forEach((node) => {
+				// 	switchNodeColors(node);
+				// });
 	
-				links.forEach((link) => {
-					switchLinkColor(link);
-				});
+				// links.forEach((link) => {
+				// 	switchLinkColor(link);
+				// });
 
 				return;
 			}
@@ -558,13 +555,13 @@ function createGraph(data) {
 				targetNode.isHighlighted = true;
 			});
 
-			nodes.forEach((node) => {
-				switchNodeColors(node);
-			});
+			// nodes.forEach((node) => {
+			// 	switchNodeColors(node);
+			// });
 
-			links.forEach((link) => {
-				switchLinkColor(link);
-			});
+			// links.forEach((link) => {
+			// 	switchLinkColor(link);
+			// });
 		}))
 		.onZoom((transform) => map.linkWidth((link) => link.width * transform.k))
 		// .onNodeDragEnd((node) => {
