@@ -1,8 +1,19 @@
-import Stats from "https://cdnjs.cloudflare.com/ajax/libs/stats.js/r17/Stats.js";
+// import Stats from "https://cdnjs.cloudflare.com/ajax/libs/stats.js/r17/Stats.js";
 
-// const DEBUG = false;
+// 	var totalFPS = new Stats();
+// 	totalFPS.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+// 	document.body.appendChild(totalFPS.dom);
 
-const DEBUG = true;
+// 	var totalFT = new Stats();
+// 	totalFT.showPanel(1); // 0: fps, 1: ms, 2: mb, 3+: custom
+// 	document.body.appendChild(totalFT.dom);
+// 	totalFT.dom.style.left = "90px";
+// 	console.log(totalFT.dom);
+
+// var t0 = 0;
+// var t1 = 0;
+// var totalT = 0;
+// var count = 0;
 
 const colors = {
 	Streamer: {
@@ -65,17 +76,10 @@ const sqrtPI = Math.sqrt(Math.PI);
 const nodeRelSize = 4;
 
 var performanceMode = false;
-
-var t0 = 0;
-var t1 = 0;
-var totalT = 0;
-var count = 0;
+var linkCurvature = 0.25;
 
 var data;
 var map;
-
-var highlightedNodes = [];
-var highlightedLinks = [];
 
 const limit = 1.3;
 var bottomLimit = limit * window.innerHeight;
@@ -89,18 +93,6 @@ const gridSize = 7500;
 const minGridValue = -(gridSize / 2);
 
 var cooldownTicks = Infinity;
-
-if(DEBUG) {
-	var totalFPS = new Stats();
-	totalFPS.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-	document.body.appendChild(totalFPS.dom);
-
-	var totalFT = new Stats();
-	totalFT.showPanel(1); // 0: fps, 1: ms, 2: mb, 3+: custom
-	document.body.appendChild(totalFT.dom);
-	totalFT.dom.style.left = "90px";
-	console.log(totalFT.dom);
-}
 
 function populateColors() {
 	Object.values(colors).forEach((userTypeColors) => {
@@ -175,6 +167,7 @@ function populateColors() {
 
 function loadMap(streamer, year, timeframe, pingType, minPings, newPerformanceMode) {
 	performanceMode = newPerformanceMode;
+	linkCurvature = performanceMode ? 0 : 0.25;
 
 	let fileName = `${streamer}_${year}`;
 	if (timeframe !== "year") fileName = `${fileName}_${timeframe}`;
@@ -187,7 +180,7 @@ function loadMap(streamer, year, timeframe, pingType, minPings, newPerformanceMo
 		preprocessData(data, pingType);
 		const dataCopy = structuredClone(data);
 		filterData(dataCopy, minPings);
-		postprocessData(dataCopy);
+		//postprocessData(dataCopy);
 		createGraph(dataCopy);
 	});
 }
@@ -299,38 +292,20 @@ function postprocessData(dataCopy) {
 }
 
 function switchNodeColors(node) {
-	const isHighlighted = node.isHighlighted || highlightedNodes.length === 0;
-
-	//console.log("isHighlighted", isHighlighted);
-
 	const newColors = performanceMode
-		? isHighlighted
-			? node.colors.performanceMode.highlighted
-			: node.colors.performanceMode.nonHighlighted
-		: isHighlighted
-			? node.colors.normalMode.highlighted
-			: node.colors.normalMode.nonHighlighted;
+		? node.colors.performanceMode.highlighted
+		: node.colors.normalMode.highlighted
 	
 	node.nodeColor = newColors.nodeColor;
 	node.nodeOutlineColor = newColors.nodeOutlineColor;
 	node.textColor = newColors.textColor;
 	node.textOutlineColor = newColors.textOutlineColor;
-
-	//console.log("after: " + node.nodeColor);
 }
 
 function switchLinkColor(link) {
-	const isHighlighted = link.isHighlighted || highlightedNodes.length === 0;
-
 	link.color = performanceMode
-		?  isHighlighted
-			? link.colors.performanceMode.highlighted
-			: link.colors.performanceMode.nonHighlighted
-		: isHighlighted
-			? link.colors.normalMode.highlighted
-			: link.colors.normalMode.nonHighlighted;
-
-	//console.log("after: " + link.color);
+		? link.colors.performanceMode.highlighted
+		: link.colors.normalMode.highlighted
 }
 
 function filterData(dataCopy, minPings) {
@@ -343,51 +318,8 @@ function filterData(dataCopy, minPings) {
 			return;
 		}
 
-		// if(node.pingCount === 0) {
-		// 	data.links = data.links.filter(link => link.sourceNode !== node && link.targetNode !== node);
-		// 	return;	
-		// }
-
  		// Remove links attached to node
 		dataCopy.links = dataCopy.links.filter(link => link.sourceNode !== node && link.targetNode !== node);
-
-		// const newLinks = [];
-		// let isAnyLinkedNodeQualified = false;
-
-		// data.links.forEach((link) => {
-
-		// 	if(link.source === node.name) {
-
-		// 		// check min pings on link.target
-		// 		if(link.targetNode.pingCount >= minPings) {
-		// 			newLinks.push(link);
-		// 			isAnyLinkedNodeQualified = true;
-		// 			return;
-		// 		}
-
-		// 		return;
-		// 	}
-
-		// 	if(link.target === node.name) {
-
-		// 		// check min pings on link.source
-		// 		if(link.sourceNode.pingCount >= minPings) {
-		// 			newLinks.push(link);
-		// 			isAnyLinkedNodeQualified = true;
-		// 			return;
-		// 		}
-
-		// 		return;
-		// 	}
-
-		// 	newLinks.push(link);
-		// });
-
-		// data.links = newLinks;
-
-		// if(isAnyLinkedNodeQualified) {
-		// 	newNodes.push(node);
-		// }
 	});
 
 	dataCopy.nodes = newNodes;
@@ -406,8 +338,6 @@ function createGraph(data) {
 	const mapElement = document.getElementById("map");
 
 	if (map !== undefined) map._destructor();
-
-	const linkCurvature = performanceMode ? 0 : 0.25;
 
 	map = ForceGraph();
 	map(mapElement)
@@ -462,7 +392,7 @@ function createGraph(data) {
 
 		.linkWidth("width")
 		.linkColor("color")
-		.linkCurvature(linkCurvature)
+		.linkCurvature(() => linkCurvature)
 
 		.linkCanvasObjectMode(() => "after")
 		.linkCanvasObject((link, context, globalScale) => {
@@ -486,7 +416,7 @@ function createGraph(data) {
 			lastGlobalScale = globalScale;
 
 			//t0 = performance.now();
-			//map.autoPauseRedraw(true);
+			map.autoPauseRedraw(true);
 
 			if(!performanceMode) context.globalCompositeOperation = "lighter";
 
@@ -496,85 +426,27 @@ function createGraph(data) {
 			// 	}, 15000);
 			// }
 
-			// return;
-			if(DEBUG) {
-				totalFPS.begin();
-				totalFT.begin();
-			}
+			// if(DEBUG) {
+			// 	totalFPS.begin();
+			// 	totalFT.begin();
+			// }
 		})
-		.onRenderFramePost((context, globalScale) => {
-			// t1 = performance.now();
-			// totalT += t1 - t0;
-			// count++; 
-			// return;
-			if(DEBUG) {
-				totalFPS.end();
-				totalFT.end();
-			}
-		})
+		// .onRenderFramePost((context, globalScale) => {
+		// 	// t1 = performance.now();
+		// 	// totalT += t1 - t0;
+		// 	// count++; 
 
-		.onNodeHover(((node) => {
-			highlightedNodes.forEach((node) => {
-				node.isHighlighted = false;
-			});
+		// 	if(DEBUG) {
+		// 		totalFPS.end();
+		// 		totalFT.end();
+		// 	}
+		// })
 
-			highlightedLinks.forEach((link) => {
-				link.isHighlighted = false;
-			});
-
-			highlightedNodes = [];
-			highlightedLinks = [];
-
-			//map.autoPauseRedraw(false);
-
-			const graphData = map.graphData();
-			const nodes = graphData.nodes;
-			const links = graphData.links;
-
-			if(!node) {
-				nodes.forEach((node) => {
-					switchNodeColors(node);
-				});
-	
-				links.forEach((link) => {
-					switchLinkColor(link);
-				});
-
-				return;
-			}
-
-			highlightedNodes.push(node);
-			node.isHighlighted = true;
-			
-			node.connectedLinks.forEach((link) => {
-				highlightedLinks.push(link);
-				link.isHighlighted = true;
-
-				const sourceNode = link.sourceNode;
-				const targetNode = link.targetNode;
-				
-				highlightedNodes.push(sourceNode);
-				highlightedNodes.push(targetNode);
-
-				sourceNode.isHighlighted = true;
-				targetNode.isHighlighted = true;
-			});
-
-			nodes.forEach((node) => {
-				switchNodeColors(node);
-			});
-
-			links.forEach((link) => {
-				switchLinkColor(link);
-			});
-		}))
 		.onZoom((transform) => map.linkWidth((link) => link.width * transform.k))
 		// .onNodeDragEnd((node) => {
 		//     node.fx = node.x;
 		//     node.fy = node.y;
 		// })
-
-		.autoPauseRedraw(false)
 
 		.graphData(data)
 		.zoomToFit(500, -1500, () => true);
@@ -653,12 +525,21 @@ function resizeCanvas() {
 
 function changePerformanceMode(newPerformanceMode) {
 	performanceMode = newPerformanceMode;
+	linkCurvature = performanceMode ? 0 : 0.25;
 
-	map.graphData().nodes.forEach((node) => {
+	const graphData = map.graphData();
+	const nodes = graphData.nodes;
+	const links = graphData.links;
+
+	nodes.forEach((node) => {
 		switchNodeColors(node);
 	});
 
-	//map.autoPauseRedraw(false);
+	links.forEach((link) => {
+		switchLinkColor(link);
+	});
+
+	map.autoPauseRedraw(false);
 }
 
 function onMapLoaded(callback) {
