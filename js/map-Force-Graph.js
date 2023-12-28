@@ -48,10 +48,10 @@ const nodeRelSize = 4;
 
 var performanceMode = false;
 
-// var t0 = 0;
-// var t1 = 0;
-// var totalT = 0;
-// var count = 0;
+var t0 = 0;
+var t1 = 0;
+var totalT = 0;
+var count = 0;
 
 var data;
 var map;
@@ -384,16 +384,16 @@ function createGraph(data) {
 		.onRenderFramePre((context, globalScale) => {
 			lastGlobalScale = globalScale;
 
-			// t0 = performance.now();
+			t0 = performance.now();
 			map.autoPauseRedraw(true);
 
 			if(!performanceMode) context.globalCompositeOperation = "lighter";
 
-			// if(count === 10) {
-			// 	setTimeout(() => {
-			// 		console.log(totalT / count);
-			// 	}, 15000);
-			// }
+			if(count === 10) {
+				setTimeout(() => {
+					console.log(totalT / count);
+				}, 15000);
+			}
 
 			// return;
 			// if(DEBUG) {
@@ -401,16 +401,16 @@ function createGraph(data) {
 			// 	totalFT.begin();
 			// }
 		})
-		// .onRenderFramePost((context, globalScale) => {
-		// 	t1 = performance.now();
-		// 	totalT += t1 - t0;
-		// 	count++; 
-		// 	return;
-		// 	if(DEBUG) {
-		// 		totalFPS.end();
-		// 		totalFT.end();
-		// 	}
-		// })
+		.onRenderFramePost((context, globalScale) => {
+			t1 = performance.now();
+			totalT += t1 - t0;
+			count++; 
+			// return;
+			// if(DEBUG) {
+			// 	totalFPS.end();
+			// 	totalFT.end();
+			// }
+		})
 		.onZoom((transform) => map.linkWidth((link) => link.width * transform.k))
 		// .onNodeDragEnd((node) => {
 		//     node.fx = node.x;
