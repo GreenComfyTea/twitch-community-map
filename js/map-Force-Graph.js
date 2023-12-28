@@ -1,6 +1,6 @@
-//import Stats from "https://cdnjs.cloudflare.com/ajax/libs/stats.js/r17/Stats.js";
+import Stats from "https://cdnjs.cloudflare.com/ajax/libs/stats.js/r17/Stats.js";
 
-// const DEBUG = false;
+const DEBUG = true;
 
 const colors = {
 	Streamer: {
@@ -64,10 +64,10 @@ const nodeRelSize = 4;
 
 var performanceMode = false;
 
-var t0 = 0;
-var t1 = 0;
-var totalT = 0;
-var count = 0;
+// var t0 = 0;
+// var t1 = 0;
+// var totalT = 0;
+// var count = 0;
 
 var data;
 var map;
@@ -88,17 +88,17 @@ const minGridValue = -(gridSize / 2);
 
 var cooldownTicks = Infinity;
 
-// if(DEBUG) {
-// 	var totalFPS = new Stats();
-// 	totalFPS.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-// 	document.body.appendChild(totalFPS.dom);
+if(DEBUG) {
+	var totalFPS = new Stats();
+	totalFPS.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+	document.body.appendChild(totalFPS.dom);
 
-// 	var totalFT = new Stats();
-// 	totalFT.showPanel(1); // 0: fps, 1: ms, 2: mb, 3+: custom
-// 	document.body.appendChild(totalFT.dom);
-// 	totalFT.dom.style.left = "90px";
-// 	console.log(totalFT.dom);
-// }
+	var totalFT = new Stats();
+	totalFT.showPanel(1); // 0: fps, 1: ms, 2: mb, 3+: custom
+	document.body.appendChild(totalFT.dom);
+	totalFT.dom.style.left = "90px";
+	console.log(totalFT.dom);
+}
 
 function populateColors() {
 	Object.values(colors).forEach((userTypeColors) => {
@@ -480,32 +480,32 @@ function createGraph(data) {
 		.onRenderFramePre((context, globalScale) => {
 			lastGlobalScale = globalScale;
 
-			t0 = performance.now();
-			map.autoPauseRedraw(true);
+			// t0 = performance.now();
+			// map.autoPauseRedraw(true);
 
 			if(!performanceMode) context.globalCompositeOperation = "lighter";
 
-			if(count === 10) {
-				setTimeout(() => {
-					console.log(totalT / count);
-				}, 15000);
-			}
+			// if(count === 10) {
+			// 	setTimeout(() => {
+			// 		console.log(totalT / count);
+			// 	}, 15000);
+			// }
 
 			// return;
-			// if(DEBUG) {
-			// 	totalFPS.begin();
-			// 	totalFT.begin();
-			// }
+			if(DEBUG) {
+				totalFPS.begin();
+				totalFT.begin();
+			}
 		})
 		.onRenderFramePost((context, globalScale) => {
-			t1 = performance.now();
-			totalT += t1 - t0;
-			count++; 
+			// t1 = performance.now();
+			// totalT += t1 - t0;
+			// count++; 
 			// return;
-			// if(DEBUG) {
-			// 	totalFPS.end();
-			// 	totalFT.end();
-			// }
+			if(DEBUG) {
+				totalFPS.end();
+				totalFT.end();
+			}
 		})
 
 		.onNodeHover(((node) => {
@@ -520,7 +520,7 @@ function createGraph(data) {
 			highlightedNodes = [];
 			highlightedLinks = [];
 
-			map.autoPauseRedraw(false);
+			// map.autoPauseRedraw(false);
 
 			const graphData = map.graphData();
 			const nodes = graphData.nodes;
@@ -568,7 +568,7 @@ function createGraph(data) {
 		//     node.fx = node.x;
 		//     node.fy = node.y;
 		// })
-
+		.autoPauseRedraw(false)
 		.graphData(data)
 		.zoomToFit(500, -1500, () => true);
 }
@@ -651,7 +651,7 @@ function changePerformanceMode(newPerformanceMode) {
 		switchNodeColors(node);
 	});
 
-	map.autoPauseRedraw(false);
+	// map.autoPauseRedraw(false);
 }
 
 function onMapLoaded(callback) {
