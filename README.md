@@ -161,7 +161,7 @@
 # Contribution
 If you wish to contribute to the project, feel free to make a pull request!
 
-Currently the project is based on **[force-graph](https://github.com/vasturiano/force-graph)** which uses **Canvas** rendering. We were looking at **[Sigma.js](https://sigmajs.org/)** for **WebGL** rendering but a complete lack of documentation was a deal breaker. If anyone were to implement it without losing existing functionality we would very grateful.
+Currently the project is based on **[force-graph](https://github.com/vasturiano/force-graph)** which uses **Canvas** rendering. We were looking at **[sigma.js](https://sigmajs.org/)** for **WebGL** rendering but a complete lack of documentation was a deal breaker. If anyone were to implement it without losing existing functionality we would very grateful.
 
 Moreover, **Firefox** Canvas support is almost **10 times worse** than the one in **Chrome**. Performance improvements would be much appreciated as well!
 
@@ -187,7 +187,7 @@ Each `[TIMEFRAME]` must contain 2 json files named as displayed above, with 1 ex
 
 The content of json files can be in 2 formats:
  1. **Default json**. Will use force physics simulation to generated a node layout on each map load client-side (can be undesirable for big maps);
- 2. **Gephi-exported json**. Includes a pregenerated in Gephi layout in a form of added `x` and `y` fields. Force physics is disabled.
+ 2. **[Gephi](https://gephi.org/)-exported json**. Includes a pregenerated in Gephi layout in a form of added `x` and `y` fields. Force physics is disabled.
 
 #### First Format:
 ```
@@ -307,7 +307,7 @@ The content of json files can be in 2 formats:
 P.S. I might add a web tool later for semi-automatic chat log parsing (from gempir's justlog) into the 1st format.
 
 # Gephi Layout
-I generated `HAchubby` map layouts in Gephi using the following settings:
+I generated `HAchubby` map layouts in [Gephi](https://gephi.org/) using the following settings:
 
 *For ~1000 nodes, adjust for smaller/bigger maps proportionally;
 
