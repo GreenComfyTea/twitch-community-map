@@ -314,15 +314,15 @@ I generated `HAchubby` map layouts in [Gephi](https://gephi.org/) using the foll
 *For ~1000 nodes, adjust for smaller/bigger maps proportionally;
 
 1. **Random Layout**
- - `Space Size`: 2500.0**
+	- `Space Size`: 2500.0**
 2. **Yifan Hu**
-    - `Optimal Distance`: 500.0*
-    - `Relative Strength`: 0.1
-    - `Initial Step Size`: 5.0
-    - `Step Ratio`: 0.5*
-    - `Adaptive Cooling`: On
-    - `Quadtree Max Level`: 16
-    - `Theta`: 0.2
+	- `Optimal Distance`: 500.0*
+	- `Relative Strength`: 0.1
+	- `Initial Step Size`: 5.0
+	- `Step Ratio`: 0.5*
+ 	- `Adaptive Cooling`: On
+	- `Quadtree Max Level`: 16
+	- `Theta`: 0.2
 3. **ForceAtlas 2**
 	- `Tolerance(speed)`: 1.0
 	- `Approximate Repulsion`: Yes
@@ -337,30 +337,30 @@ I generated `HAchubby` map layouts in [Gephi](https://gephi.org/) using the foll
 	- `Normalize Edge Weights`: No
 	- `Inverted Edge Weights`: No
 4. **ForceAtlas 2**
-   - `Inverted Edge Weights`: Yes
+	- `Inverted Edge Weights`: Yes
 5. **ForceAtlas 2**
-   - `Normalize Edge Weights`: Yes
+	- `Normalize Edge Weights`: Yes
 6. **ForceAtlas 2**
 	- `LinLog Mode`: Yes
 7. **ForceAtlas 2**
 	- `Dissuade Hubs`: Yes
 8. **ForceAtlas 2**
-   - `Dissuade Hubs`: No
+	- `Dissuade Hubs`: No
 9. **ForceAtlas 2**
-   - `LinLog Mode`: No
+	- `LinLog Mode`: No
 10. **ForceAtlas 2**
 	- `Normalize Edge Weights`: No
 11. **ForceAtlas 2**
 	- `Inverted Edge Weights`: No
 12. **Yifan Hu**
-    - Same settings as before
+	- Same settings as before
 13. **Noverlap**
-    - `Speed`: 10.0*
-    - `Ratio: 0.9
-    - `Margin: 5.0
+	- `Speed`: 10.0*
+	- `Ratio: 0.9
+	- `Margin: 5.0
 14. **Label Adjust**
-    - `Speed`: 5.0*
-    - `Include Node Size`: On
+	- `Speed`: 5.0*
+	- `Include Node Size`: On
 
 # Credits
 **[GreenComfyTea](https://github.com/GreenComfyTea)** - creator of the website and it's main contributor.  
