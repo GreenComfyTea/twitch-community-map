@@ -17,8 +17,8 @@
 
 const colors = {
 	Streamer: {
-		color: "#ff5e7e",
-		darkerColor: "#7f2f3f",
+		color: "#f25a78",
+		darkerColor: "#782d3c",
 	},
 	Staff: {
 		color: "#e52e2e",
@@ -33,12 +33,12 @@ const colors = {
 		darkerColor: "#70025c",
 	},
 	Artist: {
-		color: "#0ca2f2",
-		darkerColor: "#0d577f",
+		color: "#179de5",
+		darkerColor: "#0b4e72",
 	},
 	Partner: {
-		color: "#d9ae41",
-		darkerColor: "#6c5720",
+		color: "#bd8d13",
+		darkerColor: "#5e4609",
 	},
 	Subscriber: {
 		color: "#a951fb",
@@ -49,6 +49,8 @@ const colors = {
 		darkerColor: "#004c3c",
 	},
 }
+
+
 
 const lastUsersFound = {
 	Streamer: "",
@@ -95,7 +97,9 @@ const minGridValue = -(gridSize / 2);
 var cooldownTicks = Infinity;
 
 function populateColors() {
-	Object.values(colors).forEach((userTypeColors) => {
+	Object.values(colors).forEach((userTypeColors, i) => {
+		console.log(i, chroma.contrast('white', userTypeColors.color));
+
 		const normalHighlighted = {
 			nodeColor:			userTypeColors.color,
 			nodeOutlineColor:	userTypeColors.darkerColor,
