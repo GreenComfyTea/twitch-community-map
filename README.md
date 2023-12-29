@@ -353,7 +353,7 @@ I generated `HAchubby` map layouts in [Gephi](https://gephi.org/) using the foll
 11. **ForceAtlas 2**
 	- `Inverted Edge Weights`: No
 12. **Yifan Hu**
-	- Same settings as before
+	- Same settings as before;
 13. **Noverlap**
 	- `Speed`: 10.0*
 	- `Ratio: 0.9
