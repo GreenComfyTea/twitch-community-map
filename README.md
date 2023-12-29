@@ -145,16 +145,18 @@
 # How to Use:
 **Due to performance issues on Firefox, currently Chrome is recommended!**
 
-1. Selecting `Streamer`, `Year`, `Timeframe` and `Map Type` allows to load new maps;
-2. `Legend Info Menu` on the left can be hidden/shown by pressing the arrow;
-3.  In `Legend Info Menu` on the left pressing on `User Type` `Circle` or `Text` will zoom into a next user of that type and also scroll the `Leaderboard` to that user;
-4. `Chatter Count` and `Link Count` on the bottom left can hidden/shown by pressing the arrow;
-5. `Min Pings`will filter out the nodes and links that do not qualify. Always filters based on the current map type. Increasing the value can improve performance.
-6. `Search` function searches the user with that twitch name. It will zoom into a found user and also scroll the `Leaderboard` to that user;
-7. `Performance Mode` disables fancy style and improves performance (recommended for big maps);
-8. `Leaderboard` can be hidden/shown by pressing the arrow;
-9. `Leaderboard` Headers are clickable and determine the sorting;
-10. Pressing a user on `Leadeboard` will zoom into that user. 
+1. Map can be zoomed in, zoomed out and panned. Nodes can be dragged;
+2. Selecting `Streamer`, `Year`, `Timeframe` and `Map Type` allows to load new maps;
+3. Hovering a node will show a tooltip with `Username`, `User Type`, `Pings Received` and `Pings Sent` information;
+5. `Legend Info Menu` on the left can be hidden/shown by pressing the arrow;
+6.  In `Legend Info Menu` on the left pressing on `User Type` `Circle` or `Text` will zoom into a next user of that type and also scroll the `Leaderboard` to that user;
+7. `Chatter Count` and `Link Count` on the bottom left can hidden/shown by pressing the arrow;
+8. `Min Pings`will filter out the nodes and links that do not qualify. Always filters based on the current map type. Increasing the value can improve performance.
+9. `Search` function searches the user with that twitch name. It will zoom into a found user and also scroll the `Leaderboard` to that user;
+10. `Performance Mode` disables fancy style and improves performance (recommended for big maps);
+11. `Leaderboard` can be hidden/shown by pressing the arrow;
+12. `Leaderboard` Headers are clickable and determine the sorting;
+13. Pressing a user on `Leadeboard` will zoom into that user. 
 
 # Contribution
 If you wish to contribute to the project, feel free to make a pull request!
