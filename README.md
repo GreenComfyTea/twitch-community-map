@@ -264,6 +264,7 @@ The content of json files can be in 2 formats:
 
 
 **Node:**  
+  
 `name`/`key`: [Unique] Twitch Username in lower case, corresponds to `link` -> `source` and `target` fields;
 `displayName`/`label`: [Optional] Twitch Display Name;
 `userType`/`usertype`:	must be one of the following, determines the colors:
@@ -283,6 +284,7 @@ The content of json files can be in 2 formats:
 > `pingsReceived` and `pingsSent` must be present in both json files. The reason is that both values are displayed on the leaderboard and in the tooltip, regardless of which map is loaded. 
 
 **Link:**  
+  
 `source`:  Twitch Username in lower case, corresponds with `node` -> `name` field;
 `target`:  Twitch Username in lower case, corresponds with `node` -> `name` field;
 `userType`/`usertype`:  must match  `userType` of `source` or `target` node `userType` (the type of higher priority must be used), must be one of the following, determines the color:
