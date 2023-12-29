@@ -314,7 +314,7 @@ I generated `HAchubby` map layouts in [Gephi](https://gephi.org/) using the foll
 *For ~1000 nodes, adjust for smaller/bigger maps proportionally;
 
 1. **Random Layout**
-	- `Space Size`: 2500.0**
+	- `Space Size`: 2500.0*
 2. **Yifan Hu**
 	- `Optimal Distance`: 500.0*
 	- `Relative Strength`: 0.1
