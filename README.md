@@ -135,6 +135,7 @@
 
 </p>
 
+***
 # Dependancies
 1. **[jQuery v3.7.1](https://jquery.com)**;
 2. **[DataTables v.1.13.7](https://datatables.net)**;
@@ -142,6 +143,7 @@
 4. **[force-graph](https://github.com/vasturiano/force-graph)**;
 5. **[Pico.css](https://picocss.com)**.
 
+***
 # How to Use:
 **Due to performance issues on Firefox, currently Chrome is recommended!**
 
@@ -158,6 +160,7 @@
 12. `Leaderboard` Headers are clickable and determine the sorting;
 13. Pressing a user on `Leadeboard` will zoom into that user. 
 
+***
 # Contribution
 If you wish to contribute to the project, feel free to make a pull request!
 
@@ -362,6 +365,7 @@ I generated `HAchubby` map layouts in [Gephi](https://gephi.org/) using the foll
 	- `Speed`: 5.0*
 	- `Include Node Size`: On
 
+***
 # Credits
 **[GreenComfyTea](https://github.com/GreenComfyTea)** - creator of the website and it's main contributor.  
 **[CrippledByte](https://github.com/CrippledByte)** - provider of chat logs. 
