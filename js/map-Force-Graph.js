@@ -98,8 +98,6 @@ var cooldownTicks = Infinity;
 
 function populateColors() {
 	Object.values(colors).forEach((userTypeColors, i) => {
-		console.log(i, chroma.contrast('white', userTypeColors.color));
-
 		const normalHighlighted = {
 			nodeColor:			userTypeColors.color,
 			nodeOutlineColor:	userTypeColors.darkerColor,
@@ -113,7 +111,7 @@ function populateColors() {
 			textColorChroma:			chroma(normalHighlighted.textColor),
 			textOutlineColorChroma:		chroma(normalHighlighted.textOutlineColor)
 		};
-	
+
 		const normalNonHighlighted = {
 			nodeColor:			normalHighlightedChroma.nodeColorChroma.set("hsl.l", nonHighlightedRatio * normalHighlightedChroma.nodeColorChroma.get("hsl.l")).hex(),
 			nodeOutlineColor:	normalHighlightedChroma.nodeOutlineColorChroma.set("hsl.l", nonHighlightedRatio * normalHighlightedChroma.nodeOutlineColorChroma.get("hsl.l")).hex(),
