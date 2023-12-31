@@ -135,6 +135,7 @@
 
 </p>
 
+***
 # Dependancies
 1. **[jQuery v3.7.1](https://jquery.com)**;
 2. **[DataTables v.1.13.7](https://datatables.net)**;
@@ -142,6 +143,7 @@
 4. **[force-graph](https://github.com/vasturiano/force-graph)**;
 5. **[Pico.css](https://picocss.com)**.
 
+***
 # How to Use:
 **Due to performance issues on Firefox, currently Chrome is recommended!**
 
@@ -158,6 +160,7 @@
 12. `Leaderboard` Headers are clickable and determine the sorting;
 13. Pressing a user on `Leadeboard` will zoom into that user. 
 
+***
 # Contribution
 If you wish to contribute to the project, feel free to make a pull request!
 
@@ -265,9 +268,9 @@ The content of json files can be in 2 formats:
 
 **Node:**  
   
-`name`/`key`: [Unique] Twitch Username in lower case, corresponds to `link` -> `source` and `target` fields;
-`displayName`/`label`: [Optional] Twitch Display Name;
-`userType`/`usertype`:	must be one of the following, determines the colors:
+`name`/`key`: [Unique] Twitch Username in lower case, corresponds to `link` -> `source` and `target` fields;  
+`displayName`/`label`: [Optional] Twitch Display Name;  
+`userType`/`usertype`:	must be one of the following, determines the colors:  
  - `Streamer`
  - `Staff`
  - `Moderator`
@@ -277,16 +280,16 @@ The content of json files can be in 2 formats:
  - `Subscriber`
  - `Viewer`
 
-`pingsReceived`/`pingsreceived`: how many times a user has been pinged by others, determines the size of a node;
-`pingsSent`/`pingssent`: how many times a user pinged others, determines the size of a node.
+`pingsReceived`/`pingsreceived`: how many times a user has been pinged by others, determines the size of a node;  
+`pingsSent`/`pingssent`: how many times a user pinged others, determines the size of a node.  
 
 > [!NOTE]  
 > `pingsReceived` and `pingsSent` must be present in both json files. The reason is that both values are displayed on the leaderboard and in the tooltip, regardless of which map is loaded. 
 
 **Link:**  
   
-`source`:  Twitch Username in lower case, corresponds with `node` -> `name` field;
-`target`:  Twitch Username in lower case, corresponds with `node` -> `name` field;
+`source`:  Twitch Username in lower case, corresponds with `node` -> `name` field;  
+`target`:  Twitch Username in lower case, corresponds with `node` -> `name` field;  
 `userType`/`usertype`:  must match  `userType` of `source` or `target` node `userType` (the type of higher priority must be used), must be one of the following, determines the color:
  - `Streamer`
  - `Staff`
@@ -314,7 +317,7 @@ I generated `HAchubby` map layouts in [Gephi](https://gephi.org/) using the foll
 *For ~1000 nodes, adjust for smaller/bigger maps proportionally;
 
 1. **Random Layout**
-	- `Space Size`: 2500.0**
+	- `Space Size`: 2500.0*
 2. **Yifan Hu**
 	- `Optimal Distance`: 500.0*
 	- `Relative Strength`: 0.1
@@ -353,7 +356,7 @@ I generated `HAchubby` map layouts in [Gephi](https://gephi.org/) using the foll
 11. **ForceAtlas 2**
 	- `Inverted Edge Weights`: No
 12. **Yifan Hu**
-	- Same settings as before
+	- Same settings as before;
 13. **Noverlap**
 	- `Speed`: 10.0*
 	- `Ratio: 0.9
@@ -362,6 +365,7 @@ I generated `HAchubby` map layouts in [Gephi](https://gephi.org/) using the foll
 	- `Speed`: 5.0*
 	- `Include Node Size`: On
 
+***
 # Credits
 **[GreenComfyTea](https://github.com/GreenComfyTea)** - creator of the website and it's main contributor.  
 **[CrippledByte](https://github.com/CrippledByte)** - provider of chat logs. 
