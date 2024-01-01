@@ -316,6 +316,18 @@ I generated `HAchubby` map layouts in [Gephi](https://gephi.org/) using the foll
 
 *For ~1000 nodes, adjust for smaller/bigger maps proportionally;
 
+**Node Size:**
+	- `Type`: Ranking
+ 	- `Min Size`: 5
+  	- `Max Size`: 250
+   	- `Spline`: 3rd Shape, Control Point at Y = 0.8, X = 0
+
+**Label Size (adjust the slider below the viewport too):**
+	- `Type`: Ranking
+ 	- `Min Size`: 1
+  	- `Max Size`: 4
+   	- `Spline`: 3rd Shape, Control Point at Y = 0.8, X = 0
+
 1. **Random Layout**
 	- `Space Size`: 2500.0*
 2. **Yifan Hu**
