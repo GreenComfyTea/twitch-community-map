@@ -552,7 +552,7 @@ onload = async (event) => {
 		//scroller: true,
 		//responsive: true,
 		order: [[0, 'asc']],
-		width: 0,
+		// width: 0,
 		fixedHeader: {
 			header: true,
 			footer: false
@@ -563,9 +563,7 @@ onload = async (event) => {
 			{ data: "pingsReceived" },
 			{ data: "pingsSent" }
 		],
-		createdRow: async (row, node, index) => {
-			await dummyAsync();
-
+		createdRow: (row, node, index) => {
 			row.id = node.name;
 		
 			switch(node.userType) {
@@ -662,6 +660,8 @@ onresize = async (event) => {
 
 onMapLoaded((data) => {
 	leaderboardTable.rows.add(data.nodes);
+	// leaderboardTable.columns.adjust();
+	// leaderboardTable.draw();
 	leaderboardTable.columns.adjust();
 	leaderboardTable.draw();
 
