@@ -660,8 +660,6 @@ onresize = async (event) => {
 
 onMapLoaded((data) => {
 	leaderboardTable.rows.add(data.nodes);
-	// leaderboardTable.columns.adjust();
-	// leaderboardTable.draw();
 	leaderboardTable.columns.adjust();
 	leaderboardTable.draw();
 
