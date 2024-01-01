@@ -62,11 +62,16 @@ tbody {
 	padding-right: var(--default-margin);
 }
 
+thead tr th:hover
+{
+	filter: brightness(120%);
+}
+
+thead tr th:active {
+	filter: brightness(140%);
+}
+
 tbody tr:hover td {
-	/* border-width: 0.175rem;
-	border-color: var(--pico-subtle-grey);
-	border-style: solid; */
-	/* filter: hue-rotate(90deg); */
 	filter: brightness(150%);
 }
 
@@ -89,10 +94,10 @@ tr td:nth-child(4)
 	text-align: right;
 } */
 
-.dataTables_scrollHead,
-.dataTables_scrollBody
-{
+.dataTables_scrollBody {
 	padding-right: 0.6rem;
+    overflow-y: scroll !important;
+	overflow-x: hidden !important;
 }
 
 th {
@@ -617,11 +622,13 @@ tr td {
 	display: flex;
 	flex-direction: row;
 	pointer-events: none;
+	align-items: center;
 }
 
 .credits {
 	font-size: 1rem;
 	margin: var(--default-margin);
+	margin-right: 0.6rem;
 	vertical-align: middle;
 }
 
@@ -669,7 +676,7 @@ tr td {
 }
 
 .github {
-	height: 20px;
+	height: 1.5rem;
 	margin: var(--default-margin);
 	margin-left: 0rem;
 	vertical-align: middle;
