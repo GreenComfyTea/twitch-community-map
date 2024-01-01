@@ -78,6 +78,23 @@ tbody tr:active td {
 	filter: brightness(200%);
 }
 
+tr th:first-child,
+tr td:first-child {
+	text-align: center;
+}
+
+/* tr td:nth-child(3),
+tr td:nth-child(4)
+{
+	text-align: right;
+} */
+
+.dataTables_scrollHead,
+.dataTables_scrollBody
+{
+	padding-right: 0.6rem;
+}
+
 th {
 	font-size: 1rem;
 	min-width: fit-content;
@@ -544,10 +561,6 @@ tr td {
 		var(--width)			var(--negative-width)	0 var(--new-background-color),
 		var(--width)			0						0 var(--new-background-color),
 		var(--width)			var(--width)			0 var(--new-background-color);
-}
-
-.dataTables_scrollBody {
-	padding-right: var(--default-margin);
 }
 
 .green-text {
