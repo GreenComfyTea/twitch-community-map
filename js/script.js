@@ -409,8 +409,12 @@ function populateTimeframeDropdowns() {
 	timeframeDropdown.textContent = "";
 	timeframes.forEach((timeframe) => createSelectOption(timeframeDropdown, timeframe.text, timeframe.value));
 	
-	if (!timeframes.some((dropdownTimeframe) => dropdownTimeframe.value.localeCompare(timeframe) === 0)) {
+	if (!timeframes.some((dropdownTimeframe) => dropdownTimeframe.value === timeframe)) {
 		timeframe = timeframes[timeframes.length - 1].value;
+
+		if (timeframe === "year") {
+			timeframe = timeframes[timeframes.length - 2].value;
+		}
 	}
 
 	timeframeDropdown.value = timeframe;
@@ -426,7 +430,7 @@ function populatePingTypeDropdowns() {
 	pingTypeDropdown.textContent = "";
 	pingTypes.forEach((pingType) => createSelectOption(pingTypeDropdown, pingType.text, pingType.value));
 
-	if (!pingTypes.some((dropdownPingType) => dropdownPingType.value.localeCompare(pingType) === 0)) {
+	if (!pingTypes.some((dropdownPingType) => dropdownPingType.value === pingType)) {
 		pingType = pingTypes[0].value;
 	}
 
