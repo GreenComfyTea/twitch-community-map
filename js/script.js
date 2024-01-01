@@ -425,7 +425,7 @@ function populatePingTypeDropdowns() {
 		.map((pingType) => {
 			return { value: pingType, text: pingTypeNames[pingType] };
 		})
-		.sort((left, right) => left.text.toLocaleLowerCase().localeCompare(right.text.toLocaleLowerCase()));
+		.sort((left, right) => right.text.toLocaleLowerCase().localeCompare(left.text.toLocaleLowerCase()));
 
 	pingTypeDropdown.textContent = "";
 	pingTypes.forEach((pingType) => createSelectOption(pingTypeDropdown, pingType.text, pingType.value));
