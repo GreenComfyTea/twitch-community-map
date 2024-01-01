@@ -228,7 +228,7 @@ function preprocessData(data, pingType) {
 		node.area = 12 * node.pingCount;
 
 		node.radius = Math.max(1, Math.min(250, Math.sqrt(node.area) / sqrtPI));
-		node.squareRootRadius =  Math.sqrt(Math.max(0, Math.sqrt(node.radius))) * nodeRelSize;
+		node.squareRootRadius =  Math.sqrt(0, Math.sqrt(node.radius)) * nodeRelSize;
 		node.squaredRadius = node.radius * node.radius;
 		node.diameter = 2 * node.radius;
 	
