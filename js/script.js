@@ -29,7 +29,7 @@ const dummyAsync = async () => {};
 
 var streamer = "HAchubby";
 var year = "2022";
-var timeframe = "year";
+var timeframe = "12";
 var pingType = "pingsReceived";
 
 var minPings = 2;
