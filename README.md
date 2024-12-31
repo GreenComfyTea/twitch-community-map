@@ -27,7 +27,7 @@
 		<img alt="License" src="https://custom-icon-badges.demolab.com/github/license/GreenComfyTea/twitch-community-map?logo=law" />
 	</a>
 	<a href="">
-		<img alt="Maintenance" src="https://custom-icon-badges.demolab.com/maintenance/yes/2023?logo=tools" />
+		<img alt="Maintenance" src="https://custom-icon-badges.demolab.com/maintenance/yes/2024?logo=tools" />
 	</a>
 	<br>
 	<a href="https://jquery.com">
